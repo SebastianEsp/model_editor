@@ -1,0 +1,52 @@
+body{
+    margin: auto;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    width: 90%;
+}
+
+.entry{
+    margin-bottom: 16px;
+}
+
+.btn{
+    padding: 0px 8px 0px 8px;
+}
+
+.btn-add{
+    margin-left: 5px;
+}
+
+.btn-remove{
+    margin-left: 5px;
+}
+
+.outer{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+input{
+    height: 30px;
+}
+
+.col-sm-10{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.form-group{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 0px;
+}
+
+.col-form-label-sm{
+    word-wrap: break-word;
+}
+
+.formSubmit{
+    margin:0 auto;
+    display:block;
+    
+}
