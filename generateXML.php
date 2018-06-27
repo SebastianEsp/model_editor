@@ -16,12 +16,12 @@
     "dadk:businessAreaCode", "dct:identifier", "owl:versionInfo"];
 
     //Remove ending <rdf:RDF> tag from XML document
-    $lines = file('xml/test.xml'); 
+    $lines = file('../catalogue/models/xml/modelkatalog.rdf.xml'); 
     $last = sizeof($lines) - 1 ; 
     unset($lines[$last]); 
     
     //Save changes to XML document
-    $fp = fopen('xml/test.xml', 'w'); 
+    $fp = fopen('../catalogue/models/xml/modelkatalog.rdf.xml', 'w'); 
     fwrite($fp, implode('', $lines)); 
     fclose($fp); 
 
@@ -29,7 +29,7 @@
 
     //Add </rdf:Description node to XML document>
     $xmlTmp = '<rdf:Description ' . ((multiKeyExists($data, 'vann:preferredNamespaceUri'))?'rdf:about="' . $data[2]['attribute'] : 'rdf:about="' . $data[1]['attribute'] ) . '">' . PHP_EOL;
-    file_put_contents('xml/test.xml',$xmlTmp, FILE_APPEND);
+    file_put_contents('../catalogue/models/xml/modelkatalog.rdf.xml',$xmlTmp, FILE_APPEND);
 
     //For each child XML element of <rdf:Description> add element to XML document
     for ($i=0; $i < sizeof($data) - 1; $i++) { 
@@ -42,21 +42,21 @@
         }else if(in_array($data[$i]['key'], $attrNone)){
             $xmlTmp = '<' . $data[$i]['key'] . '>' . $data[$i]['attribute'] . '</' . $data[$i]['key'] . '>' . PHP_EOL;
         }
-        file_put_contents('xml/test.xml',$xmlTmp, FILE_APPEND); 
+        file_put_contents('../catalogue/models/xml/modelkatalog.rdf.xml',$xmlTmp, FILE_APPEND); 
     }
 
     //Add closing </rdf:Description and </rdf:RDF> tags to document
     $xmlTmp = '</rdf:Description>' . PHP_EOL . '</rdf:RDF>';
-    file_put_contents('xml/test.xml',$xmlTmp, FILE_APPEND);
+    file_put_contents('../catalogue/models/xml/modelkatalog.rdf.xml',$xmlTmp, FILE_APPEND);
 
     //Formats the XML file
-    $xmlFinal = simplexml_load_file('xml/test.xml');
+    $xmlFinal = simplexml_load_file('../catalogue/models/xml/modelkatalog.rdf.xml');
     $dom = new DOMDocument('1.0');
     $dom->preserveWhiteSpace = false;
     $dom->formatOutput = true;
     $dom->loadXML($xmlFinal->asXML());
     $xmlFinal = new SimpleXMLElement($dom->saveXML());
-    $xmlFinal->saveXML("xml/test.xml");
+    $xmlFinal->saveXML("../catalogue/models/xml/modelkatalog.rdf.xml");
 
     function multiKeyExists(array $arr, $key) {
 

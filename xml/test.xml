@@ -4381,4 +4381,33 @@ Additionnally, ELI implementers are strongly encouraged to use applies / applied
 <mlev:modellingLevel rdf:resource="http://data.gov.dk/model/concepts/ModellingLevels#Reuse"></mlev:modellingLevel>
 <dcat:theme rdf:resource=""></dcat:theme>
 </rdf:Description>
+<rdf:Description rdf:about="">
+<dct:title xml:lang="da"></dct:title>
+<dct:title xml:lang="en"></dct:title>
+<vann:preferredNamespacePrefix></vann:preferredNamespacePrefix>
+<vann:preferredNamespaceUri></vann:preferredNamespaceUri>
+<skos:altLabel xml:lang="da"></skos:altLabel>
+<skos:altLabel xml:lang="en"></skos:altLabel>
+<dct:description xml:lang="da"></dct:description>
+<dct:description xml:lang="en"></dct:description>
+<dcat:keyword xml:lang="da"></dcat:keyword>
+<dcat:keyword xml:lang="en"></dcat:keyword>
+<adms:versionNotes xml:lang="da"></adms:versionNotes>
+<adms:versionNotes xml:lang="en"></adms:versionNotes>
+<owl:versionInfo></owl:versionInfo>
+<dct:identifier></dct:identifier>
+<dct:issued rdf:datatype=""></dct:issued>
+<dct:modified rdf:datatype=""></dct:modified>
+<vcard:contactPoint rdf:resource=""></vcard:contactPoint>
+<adms:page rdf:resource=""></adms:page>
+<adms:landingPage rdf:resource=""></adms:landingPage>
+<dct:publisher rdf:resource=""></dct:publisher>
+<dcat:dataset rdf:resource=""></dcat:dataset>
+<dct:hasVersion rdf:resource=""></dct:hasVersion>
+<dct:isVersionOf rdf:resource=""></dct:isVersionOf>
+<dct:type rdf:resource=""></dct:type>
+<mreg:modellingRegime rdf:resource=""></mreg:modellingRegime>
+<mlev:modellingLevel rdf:resource=""></mlev:modellingLevel>
+<dcat:theme rdf:resource=""></dcat:theme>
+</rdf:Description>
 </rdf:RDF>
