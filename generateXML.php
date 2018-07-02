@@ -21,11 +21,11 @@
     unset($lines[$last]); 
     
     //Save changes to XML document
-    $fp = fopen('../catalogue/models/xml/modelkatalog.rdf.xml', 'w'); 
+    $fp = fopen('../catalogue/models/xml/modelkatalog.rdf.xml', 'w');
     fwrite($fp, implode('', $lines)); 
     fclose($fp); 
 
-    echo var_dump($data);
+    //echo var_dump($data);
 
     //Add </rdf:Description node to XML document>
     $xmlTmp = '<rdf:Description ' . ((multiKeyExists($data, 'vann:preferredNamespaceUri'))?'rdf:about="' . $data[2]['attribute'] : 'rdf:about="' . $data[1]['attribute'] ) . '">' . PHP_EOL;
@@ -61,7 +61,7 @@
     function multiKeyExists(array $arr, $key) {
 
         for ($i=0; $i < sizeof($arr) - 1; $i++) { 
-            echo var_dump($arr[$i]);
+            //print_r ($arr[$i]);
             if(in_array($key, $arr[$i])){
                 $keyPos = $i;
                 return true;

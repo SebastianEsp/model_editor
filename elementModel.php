@@ -84,7 +84,7 @@ function getValue($choice){
     $tmp = [];
     $val = '';
 
-    $xml = simplexml_load_file('http://data.gov.dk/modelcatalogue/xml/ModelTypes.rdf.xml');
+    $xml = simplexml_load_file('http://data.gov.dk/catalogue/models/xml/ModelTypes.rdf.xml');
 
     $tmp = $xml->xpath('//@rdf:about');
     $result = array_merge($result, $tmp);
@@ -109,7 +109,7 @@ function getValue($choice){
 
 function getAttributes(){
     $result = [];
-    $xml = simplexml_load_file('http://data.gov.dk/modelcatalogue/xml/ModelTypes.rdf.xml');
+    $xml = simplexml_load_file('http://data.gov.dk/catalogue/models/xml/ModelTypes.rdf.xml');
 
     $choices = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
 
@@ -123,7 +123,7 @@ function getAttributes(){
 
 function getDescriptions(){
     $result = [];
-    $xml = simplexml_load_file('http://data.gov.dk/modelcatalogue/xml/ModelTypes.rdf.xml');
+    $xml = simplexml_load_file('http://data.gov.dk/catalogue/models/xml/ModelTypes.rdf.xml');
 
     $attr = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
 
