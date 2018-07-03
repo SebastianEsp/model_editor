@@ -5,7 +5,7 @@
     $tmp = [];
     $val = '';
 
-    $xml = simplexml_load_file('http://data.gov.dk/modelcatalogue/ModelTypes.rdf.xml');
+    $xml = simplexml_load_file('../xml/ModelTypes.rdf.xml');
 
     $tmp = $xml->xpath('//@rdf:about');
     $result = array_merge($result, $tmp);
