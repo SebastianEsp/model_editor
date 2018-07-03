@@ -62,20 +62,20 @@ $keyword = new XMLElement('dcat:', 'keyword', array('xml:lang="da"','xml:lang="e
 $versionNotes = new XMLElement('adms:', 'versionNotes', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow');
 $versionInfo = new XMLElement('owl:', 'versionInfo', '', '', '', true, false, 'buttonDouble');
 $identifier = new XMLElement('dct:', 'identifier', '', '', '', true, false, 'buttonDouble');
-$issued = new XMLElement('dct:', 'issued', 'rdf:datatype="http://www.w3.org/2001/XMLSchema#date"', 'date', '', false, false, 'doubleColumn');
-$modified = new XMLElement('dct:', 'modified', 'rdf:datatype="http://www.w3.org/2001/XMLSchema#date"', 'date', '', false, false, 'doubleColumn');
+$issued = new XMLElement('dct:', 'issued', 'rdf:datatype="http://www.w3.org/2001/XMLSchema#date"', 'date', '', false, false, 'singleColumn');
+$modified = new XMLElement('dct:', 'modified', 'rdf:datatype="http://www.w3.org/2001/XMLSchema#date"', 'date', '', false, false, 'singleColumn');
 $contactPoint = new XMLElement('vcard:', 'contactPoint', '', '', '', false, true, 'doubleColumn');    
-$page = new XMLElement('adms:', 'page', '', '', '', true, false, 'buttonDouble');    
-$landingPage = new XMLElement('adms:', 'landingPage', '', '', '', false, false, 'doubleColumn');    
-$publisher = new XMLElement('dct:', 'publisher', '', '', '', true, true, 'buttonDouble');   
+$page = new XMLElement('adms:', 'page', '', '', '', true, false, 'buttonSingle');    
+$landingPage = new XMLElement('adms:', 'landingPage', '', '', '', false, false, 'singleColumn');    
+$publisher = new XMLElement('dct:', 'publisher', '', '', '', true, true, 'buttonSingle');   
 $dataset = new XMLElement('dcat:', 'dataset', '', '', '', true, false, 'buttonDouble');   
 $hasVersion = new XMLElement('dct:', 'hasVersion', '', '', '', true, false, 'buttonDouble');   
 $isVersionOf = new XMLElement('dct:', 'isVersionOf', '', '', '', false, false, 'doubleColumn');   
-$type = new XMLElement('dct:', 'type', getAttributes(), '', getDescriptions(), false, true, 'doubleColumn'); 
-$modellingRegime = new XMLElement('mreg:', 'modellingRegime', '', '', '', false, true, 'doubleColumn'); 
-$modellingLevel = new XMLElement('mlev:', 'modellingLevel', '', '', '', false, true, 'doubleColumn'); 
-$theme = new XMLElement('dcat:', 'theme', '', '', '', false, false, 'doubleColumn'); 
-$distribution = new XMLElement('adms:', 'distribution', '', '', '', true, false, 'doubleColumn'); 
+$type = new XMLElement('dct:', 'type', getTypeAttributes(), '', getTypeDescriptions(), false, true, 'singleColumn'); 
+$modellingRegime = new XMLElement('mreg:', 'modellingRegime', getRegimeAttributes(), '', getRegimeDescriptions(), false, true, 'singleColumn'); 
+$modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelAttributes(), '', getLevelDescriptions(), false, true, 'singleColumn'); 
+$theme = new XMLElement('dcat:', 'theme', '', '', '', false, false, 'singleColumn'); 
+$distribution = new XMLElement('adms:', 'distribution', '', '', '', true, false, 'buttonSingle'); 
 $fileSize = new XMLElement('schema:', 'fileSize', '', '', '', false, false, 'doubleColumn');
 $accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn');  
 
@@ -107,7 +107,7 @@ function getValue($choice){
     return $val;
 }
 
-function getAttributes(){
+function getTypeAttributes(){
     $result = [];
     $xml = simplexml_load_file('../xml/ModelTypes.rdf.xml');
 
@@ -121,7 +121,7 @@ function getAttributes(){
     return $result;
 }
 
-function getDescriptions(){
+function getTypeDescriptions(){
     $result = [];
     $xml = simplexml_load_file('../xml/ModelTypes.rdf.xml');
 
@@ -129,6 +129,62 @@ function getDescriptions(){
 
     for ($i=0; $i < sizeof($attr); $i++) { 
         $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModelTypes#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getRegimeAttributes(){
+    $result = [];
+    $xml = simplexml_load_file('../xml/ModellingRegimes.rdf.xml');
+
+    $choices = array('FODS', 'Grunddata', 'International');
+
+    for ($i=0; $i < sizeof($choices); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingRegimes#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getRegimeDescriptions(){
+    $result = [];
+    $xml = simplexml_load_file('../xml/ModellingRegimes.rdf.xml');
+
+    $attr = array('FODS', 'Grunddata', 'International');
+
+    for ($i=0; $i < sizeof($attr); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingRegimes#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getLevelAttributes(){
+    $result = [];
+    $xml = simplexml_load_file('../xml/ModellingLevels.rdf.xml');
+
+    $choices = array('Formidling', 'Genbrug', 'Sammenhæng');
+
+    for ($i=0; $i < sizeof($choices); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingLevels#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getLevelDescriptions(){
+    $result = [];
+    $xml = simplexml_load_file('../xml/ModellingLevels.rdf.xml');
+
+    $attr = array('Formidling', 'Genbrug', 'Sammenhæng');
+
+    for ($i=0; $i < sizeof($attr); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingLevels#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
