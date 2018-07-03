@@ -103,8 +103,9 @@ function generateElement($element){
             echo ' 
             <div class="form-group row no-gutters"> <!--type-->  
             <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">' . $element->name . (($element->isRequired==true)?'*':'') .'</label>
-                <div class="input-group col-sm-10">
-                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" placeholder="Value" value="">
+                <div class="input-group col-sm-10">'
+                .((is_array($element->attribute) == false)? '<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value="" placeholder="Attribute">':generateDropdown($element)) .
+                '<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" placeholder="Value" value="">        
                 </div>
             </div>';
         //Generate html element with two input fields for xml attribute and value and a button to dynamically add additional copies of this element
