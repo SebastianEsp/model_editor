@@ -126,7 +126,7 @@ function generateElement($element){
             <div class="form-group row no-gutters justify-content-end">
                 <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_input">'. $element->name . (($element->isRequired==true)?'*':'') .'</label>
                 <div class="input-group entry col-sm-10">
-                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_input">
+                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_input" placeholder="Attribute">
                     <button class="btn btn-success btn-add" type="button" tabindex="-1">
                         <i class="fas fa-plus"></i>
                     </button>
