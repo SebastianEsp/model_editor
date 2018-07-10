@@ -11,6 +11,8 @@ public $hasMultiplicity;
 public $isRequired;
 public $columns;
 public $descriptionLabel;
+public $ReadOnly;
+public $Hidden;
 
 //valid xml elements
 public $title;
@@ -39,8 +41,9 @@ public $distribution;
 public $fileSize;
 public $accessURL;
 
+
     //Defines the properties of a valid xml element
-    public function __construct($Prefix, $Name, $Attribute, $Value, $DescriptionLabel, $HasMultiplicity, $IsRequired, $Columns) {
+    public function __construct($Prefix, $Name, $Attribute, $Value, $DescriptionLabel, $HasMultiplicity, $IsRequired, $Columns, $ReadOnly, $Hidden) {
         $this->prefix = $Prefix;
         $this->name = $Name;
         $this->attribute = $Attribute;
@@ -49,35 +52,37 @@ public $accessURL;
         $this->hasMultiplicity = $HasMultiplicity;
         $this->isRequired = $IsRequired;
         $this->columns = $Columns;
+        $this->readOnly = $ReadOnly;
+        $this->hidden = $Hidden;
     }
 }
 
 //Definitions of each possible xml element a model can contain
-$title = new XMLElement('dct:', 'title', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow');
-$preferredNamespacePrefix = new XMLElement('vann:', 'preferredNamespacePrefix', '', '', '', false, true, 'singleColumn');
-$preferredNamespaceUri = new XMLElement('vann:', 'preferredNamespaceUri', '', '', '', false, true, 'singleColumn');
-$altLabel = new XMLElement('skos:', 'altLabel', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow');
-$description = new XMLElement('dct:', 'description', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow');
-$keyword = new XMLElement('dcat:', 'keyword', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow');
-$versionNotes = new XMLElement('adms:', 'versionNotes', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow');
-$versionInfo = new XMLElement('owl:', 'versionInfo', '', '', '', true, false, 'buttonDouble');
-$identifier = new XMLElement('dct:', 'identifier', '', '', '', true, false, 'buttonDouble');
-$issued = new XMLElement('dct:', 'issued', 'rdf:datatype="http://www.w3.org/2001/XMLSchema#date"', 'date', '', false, false, 'singleColumn');
-$modified = new XMLElement('dct:', 'modified', 'rdf:datatype="http://www.w3.org/2001/XMLSchema#date"', 'date', '', false, false, 'singleColumn');
-$contactPoint = new XMLElement('vcard:', 'contactPoint', '', '', '', false, true, 'doubleColumn');    
-$page = new XMLElement('adms:', 'page', '', '', '', true, false, 'buttonSingle');    
-$landingPage = new XMLElement('adms:', 'landingPage', '', '', '', false, false, 'singleColumn');    
-$publisher = new XMLElement('dct:', 'publisher', '', '', '', true, true, 'buttonSingle');   
-$dataset = new XMLElement('dcat:', 'dataset', '', '', '', true, false, 'buttonDouble');   
-$hasVersion = new XMLElement('dct:', 'hasVersion', '', '', '', true, false, 'buttonDouble');   
-$isVersionOf = new XMLElement('dct:', 'isVersionOf', '', '', '', false, false, 'doubleColumn');   
-$type = new XMLElement('dct:', 'type', getTypeAttributes(), '', getTypeDescriptions(), false, true, 'singleColumn'); 
-$modellingRegime = new XMLElement('mreg:', 'modellingRegime', getRegimeAttributes(), '', getRegimeDescriptions(), false, true, 'singleColumn'); 
-$modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelAttributes(), '', getLevelDescriptions(), false, true, 'singleColumn'); 
-$theme = new XMLElement('dcat:', 'theme', '', '', '', false, false, 'singleColumn'); 
-$distribution = new XMLElement('adms:', 'distribution', '', '', '', true, false, 'buttonSingle'); 
-$fileSize = new XMLElement('schema:', 'fileSize', '', '', '', false, false, 'doubleColumn');
-$accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn');  
+$title = new XMLElement('dct:', 'title', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow', true, false);
+$preferredNamespacePrefix = new XMLElement('vann:', 'preferredNamespacePrefix', '', '', '', false, true, 'singleColumn', false, false);
+$preferredNamespaceUri = new XMLElement('vann:', 'preferredNamespaceUri', '', '', '', false, true, 'singleColumn', false, false);
+$altLabel = new XMLElement('skos:', 'altLabel', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
+$description = new XMLElement('dct:', 'description', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow', true, false);
+$keyword = new XMLElement('dcat:', 'keyword', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
+$versionNotes = new XMLElement('adms:', 'versionNotes', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
+$versionInfo = new XMLElement('owl:', 'versionInfo', '', '', '', true, false, 'buttonDouble', false, false);
+$identifier = new XMLElement('dct:', 'identifier', '', '', '', true, false, 'buttonDouble', false, false);
+$issued = new XMLElement('dct:', 'issued', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
+$modified = new XMLElement('dct:', 'modified', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
+$contactPoint = new XMLElement('vcard:', 'contactPoint', '', '', '', false, true, 'doubleColumn', false, false);    
+$page = new XMLElement('adms:', 'page', '', '', '', true, false, 'buttonSingle', false, false);    
+$landingPage = new XMLElement('adms:', 'landingPage', '', '', '', false, false, 'singleColumn', false, false);    
+$publisher = new XMLElement('dct:', 'publisher', '', '', '', true, true, 'buttonSingle', false, false);   
+$dataset = new XMLElement('dcat:', 'dataset', '', '', '', true, false, 'buttonDouble', false, false);   
+$hasVersion = new XMLElement('dct:', 'hasVersion', '', '', '', true, false, 'buttonDouble', false, false);   
+$isVersionOf = new XMLElement('dct:', 'isVersionOf', '', '', '', false, false, 'doubleColumn', false, false);   
+$type = new XMLElement('dct:', 'type', getTypeAttributes(), '', getTypeDescriptions(), false, true, 'singleColumn', false, false); 
+$modellingRegime = new XMLElement('mreg:', 'modellingRegime', getRegimeAttributes(), '', getRegimeDescriptions(), false, true, 'singleColumn', false, false); 
+$modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelAttributes(), '', getLevelDescriptions(), false, true, 'singleColumn', false, false); 
+$theme = new XMLElement('dcat:', 'theme', '', '', '', false, false, 'singleColumn', false, false); 
+$distribution = new XMLElement('adms:', 'distribution', '', '', '', true, false, 'buttonSingle', false, false); 
+$fileSize = new XMLElement('schema:', 'fileSize', '', '', '', false, false, 'doubleColumn', false, false);
+$accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn', false, false);  
 
 function getValue($choice){
     $result = [];

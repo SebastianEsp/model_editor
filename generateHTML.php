@@ -94,7 +94,7 @@ function generateElement($element){
             <div class="form-group row no-gutters" > <!--Standard form group with two inputs-->
                 <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">'. $element->name . (($element->isRequired==true)?'*':'') .'</label>
                 <div class="input-group col-sm-10" >'
-                    .((is_array($element->attribute) == false)?'<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value="" placeholder="Attribute">':generateDropdown($element)) .
+                    .((is_array($element->attribute) == false)?'<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . ' ' . (($element->hidden==true)?'hidden="true"':'') . '>':generateDropdown($element)) .
                     '<input type="text" class="form-control form-control-sm inputField ' .(($element->value=='date')?'datepicker':'') .'" id="'. $element->name .'_value_input" placeholder="Value" value="">
                 </div>
             </div>';
@@ -104,7 +104,7 @@ function generateElement($element){
             <div class="form-group row no-gutters"> <!--type-->  
             <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">' . $element->name . (($element->isRequired==true)?'*':'') .'</label>
                 <div class="input-group col-sm-10">'
-                .((is_array($element->attribute) == false)? '<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value="" placeholder="Attribute">':generateDropdown($element)) .'       
+                .((is_array($element->attribute) == false)? '<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input"' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute">':generateDropdown($element)) .'       
                 </div>
             </div>';
         //Generate html element with two input fields for xml attribute and value and a button to dynamically add additional copies of this element
@@ -113,8 +113,8 @@ function generateElement($element){
             <div class="form-group row no-gutters justify-content-end"> <!--Form group with dynamic adding and removal of inputs-->
                 <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">'. $element->name . (($element->isRequired==true)?'*':'') .'</label>
                 <div class="input-group entry col-sm-10">'
-                    .((is_array($element->attribute) == false)? '<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value="" placeholder="Attribute">':generateDropdown($element)) .
-                    '<input type="text" class="form-control form-control-sm inputField" id="'. $element->name .'_value_input" placeholder="Value" value="">
+                    .((is_array($element->attribute) == false)? '<input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input"' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute">':generateDropdown($element)) .
+                    '<input type="text" class="form-control form-control-sm inputField" id="'. $element->name .'_value_input" placeholder="Value" ' . ((is_array($element->attribute) && sizeOf($element->attribute)==1)?'value='. "'" . (string)$element->attribute[0] . "'" .'':'') . '>
                     <button class="btn btn-success btn-add" type="button" tabindex="-1">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -137,7 +137,7 @@ function generateElement($element){
             <div class="form-group row no-gutters justify-content-end" > <!--Standard form group with two inputs-->
                 <label class="col-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">'. $element->name . (($element->isRequired==true)?'*':'') .'</label> 
                 <div class="input-group col-10">
-                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value=' . "'" . (string)$element->attribute[0] . "'" . ' placeholder="Attribute">
+                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
                     <input type="text" class="form-control form-control-sm inputField ' .(($element->value=='date')?'datepicker':'') .'" id="'. $element->name .'_value_input" placeholder="Value" value="">
                 </div>
                     
@@ -145,7 +145,7 @@ function generateElement($element){
 
                 <label class="col-sm-2"></label>
                 <div class="col-10 input-group">
-                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value=' . "'" . (string)$element->attribute[1] . "'" . ' placeholder="Attribute">
+                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[1] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
                     <input type="text" class="form-control form-control-sm inputField ' .(($element->value=='date')?'datepicker':'') .'" id="'. $element->name .'_value_input" placeholder="Value" value="">
                 </div>
             </div>';
@@ -159,7 +159,7 @@ function generateElement($element){
                         <label class="col-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">'. $element->name . (($element->isRequired==true)?'*':'') .'</label>
                         <span class="col">
                         <div class="input-group col-12">
-                            <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value=' . "'" . $element->attribute[0] . "'" . ' placeholder="Attribute">
+                            <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
                             <input type="text" class="form-control form-control-sm inputField" id="'. $element->name .'_value_input" placeholder="Value" value="">
                         </div>
 
@@ -167,7 +167,7 @@ function generateElement($element){
 
                         <label class="col-2"></label>
                         <div class="input-group col-12">
-                            <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value=' . "'" . $element->attribute[1] . "'" . ' placeholder="Attribute">
+                            <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[1] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
                             <input type="text" class="form-control form-control-sm inputField" id="'. $element->name .'_value_input" placeholder="Value" value="">
                         </div>
                         </span>
