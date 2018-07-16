@@ -55,11 +55,11 @@ $(function()
         //Find element with class "entry" within the form. Make a copy of the input group and append to parent 
         var controlForm = $('.xmlForm form:first'),
             currentEntry = $(this).parent('.entry:first'),
-            newEntry = $(currentEntry.clone().appendTo(currentEntry.parent())); 
+            newEntry = $(currentEntry.clone().appendTo(currentEntry.parent()));
 
         //If button is not the last element define as remove button.
         newEntry.find('input').val('');
-        currentEntry.parent().find('.entry:not(:last) .btn-add')
+        currentEntry.parent().find('.entry:not(:first) .btn-add')
             .removeClass('btn-add').addClass('btn-remove')
             .removeClass('btn-success').addClass('btn-danger')
             .html('<i class="fas fa-minus"></i>');
@@ -70,11 +70,14 @@ $(function()
       var controlForm = $('.xmlForm form:first'),
           currentEntry = $(this).parent().parent('.entry:first'),
           tmp = $(currentEntry.parent().append('<div class="w-100"></div>')),
-          newEntry = $(currentEntry.clone().appendTo(currentEntry.parent())); 
+          newEntry = $(currentEntry.clone().appendTo(currentEntry.parent())),
+          finalEntry = $(newEntry.find(".attribute_input").each(function () {
+            $(this).removeAttr('placeholder');
+        }));
 
       //If button is not the last element define as remove button.
       newEntry.find('input').val('');
-      currentEntry.parent().find('.entry:not(:last) .btn-double-add')
+      currentEntry.parent().find('.entry:not(:first) .btn-double-add')
           .removeClass('btn-double-add').addClass('btn-double-remove')
           .removeClass('btn-success').addClass('btn-danger')
           .html('<i class="fas fa-minus"></i>');
@@ -152,7 +155,12 @@ function submitForm(btn){
   );
 }; 
 
-//jquery datepicker hook
-$().ready(function () {
-  $( ".datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
-});
+function resizeInput() {
+  $(this).attr('size', $(this).val().length);
+}
+
+$('input[type="text"]')
+  // event handler
+  .keyup(resizeInput)
+  // resize on page load
+  .each(resizeInput);
