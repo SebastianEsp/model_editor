@@ -5,7 +5,7 @@
     //Defines the attribute namespace for each xml node type
     $attrResource = ["vcard:contactPoint", "adms:page","adms:landingPage", "dct:publisher", "dcat:dataset", 
     "dct:hasVersion", "dct:isVersionOf", "dct:type", "mreg:modellingRegime", "mlev:modellingLevel", "dcat:theme", "adms:distribution",
-    "dcat:accessURL"];
+    "dcat:accessURL", "dct:license", "dct:format"];
     
     $attrLanguage = ["dct:title", "adms:versionNotes", "dct:description", "skos:altLabel", "dcat:keyword", 
     "adms:versionNotes"];
@@ -32,7 +32,7 @@
     file_put_contents('../xml/modelkatalog.rdf.xml',$xmlTmp, FILE_APPEND);
 
     //For each child XML element of <rdf:Description> add element to XML document
-    for ($i=0; $i < sizeof($data) - 1; $i++) { 
+    for ($i=0; $i < sizeof($data); $i++) { 
         if(in_array($data[$i]['key'], $attrLanguage)){
             $xmlTmp = '<' . $data[$i]['key'] . ' ' . $data[$i]['attribute'] . '>' . $data[$i]['value'] . '</' . $data[$i]['key'] . '>' . PHP_EOL;
         }else if(in_array($data[$i]['key'], $attrResource)){

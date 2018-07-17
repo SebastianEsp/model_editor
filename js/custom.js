@@ -48,7 +48,7 @@ $(document).click(function(event) {
 
 $(function()
 {
-    $(document).on('click', '.btn-add', function(e)
+    $(document).on('click', '.btn-add', function(e) //On Click event for buttons belonging to elements with one element
     {
         e.preventDefault();
 
@@ -57,26 +57,34 @@ $(function()
             currentEntry = $(this).parent('.entry:first'),
             newEntry = $(currentEntry.clone().appendTo(currentEntry.parent()));
 
-        //If button is not the last element define as remove button.
+        //If button is not the first element define as remove button.
         newEntry.find('input').val('');
         currentEntry.parent().find('.entry:not(:first) .btn-add')
             .removeClass('btn-add').addClass('btn-remove')
             .removeClass('btn-success').addClass('btn-danger')
             .html('<i class="fas fa-minus"></i>');
-    }).on('click', '.btn-double-add', function(e){
+    }).on('click', '.btn-double-add', function(e) //On Click event for buttons belonging to elements with two elements
+    {
       e.preventDefault();
 
       //Find element with class "entry" within the form. Make a copy of the input group and append to parent 
       var controlForm = $('.xmlForm form:first'),
           currentEntry = $(this).parent().parent('.entry:first'),
           tmp = $(currentEntry.parent().append('<div class="w-100"></div>')),
-          newEntry = $(currentEntry.clone().appendTo(currentEntry.parent())),
-          finalEntry = $(newEntry.find(".attribute_input").each(function () {
-            $(this).removeAttr('placeholder');
-        }));
+          newEntry = $(currentEntry.clone().appendTo(currentEntry.parent()));
 
-      //If button is not the last element define as remove button.
-      newEntry.find('input').val('');
+      //Find each input field of the new element. If the disabled property is not set the value should be removed
+      //This means that an element with already filled out fields will not have their values copied unless, the input field is marked disabled
+      newEntry.find('input').each(function() {
+        if($(this).prop('disabled') == false){
+          $(this).val('');
+        }  
+      });
+
+      //Remove the label text for all children so only one label is displayed per form-group
+      $(this).parent().parent().parent().find('label').last().text('');
+
+      //If button is not the first element define as remove button.
       currentEntry.parent().find('.entry:not(:first) .btn-double-add')
           .removeClass('btn-double-add').addClass('btn-double-remove')
           .removeClass('btn-success').addClass('btn-danger')

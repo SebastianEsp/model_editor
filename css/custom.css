@@ -5,10 +5,6 @@ body{
     width: 90%;
 }
 
-.entry{
-    margin-bottom: 16px;
-}
-
 .btn{
     padding: 0px 8px 0px 8px;
 }
@@ -38,6 +34,11 @@ input{
 .col-12{
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.no-padding{
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .form-group{

@@ -52,7 +52,7 @@ function generateDistributionForm(){
     include_once 'elementModel.php';
     global $genNum;
 
-    $elements = array($title, $accessURL, $fileSize);
+    $elements = array($title, $description, $accessURL, $fileSize, $type, $issued, $license, $format);
 
     switch($genNum){
         case 'first':
@@ -69,7 +69,7 @@ function generateModelForm(){
     include_once 'elementModel.php';
     global $genNum;
 
-    $elements = array($title, $preferredNamespacePrefix, $preferredNamespaceUri, $altLabel, $description, 
+    $elements = array($title, $description, $preferredNamespacePrefix, $preferredNamespaceUri, $altLabel, 
     $keyword, $versionNotes, $versionInfo, $identifier, $issued, $modified, $contactPoint, $page, $landingPage,
     $publisher, $dataset, $hasVersion, $isVersionOf, $type, $modellingRegime, $modellingLevel, $theme, $distribution);
 
@@ -134,20 +134,28 @@ function generateElement($element){
             </div>';
          }else if( $element->columns == 'doubleRow'){
             echo '
+            <div>
             <div class="form-group row no-gutters justify-content-end" > <!--Standard form group with two inputs-->
-                <label class="col-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">'. $element->name . (($element->isRequired==true)?'*':'') .'</label> 
-                <div class="input-group col-10">
-                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
-                    <input type="text" class="form-control form-control-sm inputField" id="'. $element->name .'_value_input" placeholder="Value" value="">
-                </div>
-                    
-                <div class="w-100"></div>
+                 <div class="col">   
+                    <div class="form-group row no-gutters justify-content-end"> 
+                        <label class="col-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">'. $element->name . (($element->isRequired==true)?'*':'') .'</label> 
+                        <span class="col">
+                        <div class="input-group col-12 no-padding">
+                            <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
+                            <input type="text" class="form-control form-control-sm inputField" id="'. $element->name .'_value_input" placeholder="Value" value="">
+                        </div>
+                            
+                        <div class="w-100"></div>
 
-                <label class="col-sm-2"></label>
-                <div class="col-10 input-group">
-                    <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[1] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
-                    <input type="text" class="form-control form-control-sm inputField ' .(($element->value=='date')?'datepicker':'') .'" id="'. $element->name .'_value_input" placeholder="Value" value="">
-                </div>
+                        <span class="col-2"></span>
+                        <div class="col-12 input-group no-padding">
+                            <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" ' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[1] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled="disabled"':'') . '>
+                            <input type="text" class="form-control form-control-sm inputField ' .(($element->value=='date')?'datepicker':'') .'" id="'. $element->name .'_value_input" placeholder="Value" value="">
+                        </div>
+                        </span>
+                    </div>
+                </div>    
+            </div>
             </div>';
          }
          else if( $element->columns == 'buttonDoubleRow'){
@@ -165,7 +173,7 @@ function generateElement($element){
 
                         <div class="w-100"></div>
 
-                        <label class="col-2"></label>
+                        <span class="col-2"></span>
                         <div class="input-group col-12">
                             <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField attribute_input" id="'. $element->name .'_attribute_input" ' . ' placeholder="Attribute"' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[1] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . (($element->readOnly==true)?'disabled="disabled"':'') . '>
                             <input type="text" class="form-control form-control-sm inputField" id="'. $element->name .'_value_input" placeholder="Value" value="">

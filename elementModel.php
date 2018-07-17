@@ -40,6 +40,8 @@ public $theme;
 public $distribution;
 public $fileSize;
 public $accessURL;
+public $license;
+public $format;
 
 
     //Defines the properties of a valid xml element
@@ -82,7 +84,9 @@ $modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelAttributes()
 $theme = new XMLElement('dcat:', 'theme', '', '', '', false, false, 'singleColumn', false, false); 
 $distribution = new XMLElement('adms:', 'distribution', '', '', '', true, false, 'buttonSingle', false, false); 
 $fileSize = new XMLElement('schema:', 'fileSize', '', '', '', false, false, 'doubleColumn', false, false);
-$accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn', false, false);  
+$accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn', false, false);
+$license = new XMLElement('dct:', 'license', '', '', '', true, true, 'singleColumn', false, false);  
+$format = new XMLElement('dct:', 'format', '', '', '', false, false, 'singleColumn', false, false);  
 
 function getValue($choice){
     $result = [];
