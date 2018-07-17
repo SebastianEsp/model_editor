@@ -15,7 +15,7 @@ function generateDropdown($element){
     for ($i=0; $i < sizeof($element->attribute); $i++) { 
         //$tmp .= $element.getValue('Model');
 
-        $dropdown_2 = $dropdown_2 . '<a class="dropdown-item" title="'. $element->descriptionLabel[$i]  .'" href="javascript:;" >' . $element->attribute[$i] .'</a>';
+        $dropdown_2 = $dropdown_2 . '<a class="dropdown-item" title="'. $element->descriptionLabel[$i]  .'" href="javascript:;" data-foo="'. $element->value[$i]  .'">' . $element->attribute[$i] .'</a>';
     }
     
     $dropdown_3 = '</div>

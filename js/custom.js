@@ -39,10 +39,11 @@ $( document ).ready(function() {
 
 //Click event handler
 $(document).click(function(event) {
-  if($(event.target).hasClass('dropdown-item'))
+  if($(event.target).hasClass('dropdown-item')) //If click target is a dropdown item, set the innerhtml, value and data-* attributes of the parent
   {
     $( event.target ).parent().parent().children(':first-child').text($(event.target).text());
     $( event.target ).parent().parent().children(':first-child').attr('Value', ($(event.target).text()));
+    $( event.target ).parent().parent().children(':first-child').data('foo', ($(event.target).data('foo')));
   }
 });
 
@@ -123,24 +124,21 @@ $(function()
 
 //ajax callback
 function submitForm(btn){
-
-  console.log($(btn));
   
   var inputs = [];
   //Find each input field in the Form. If the element contains a name, add the name, attribute and value paramaters to the inputs array.
   //Each entry in the inputs array corresponds to a single element in the xml document
 
   $(btn).find('.inputField').each(function(){
-    console.log($(this));
     if($(this).attr('name') != null){
 
-      if($(this).prop('tagName') == 'A'){
+      if($(this).prop('tagName') == 'A'){ //If element is a dropdown menu item
         inputs.push({
           key: $(this).attr('name'),
-          attribute: $(this).attr('value'),
-          value: $(this).parent().next().val()
+          attribute: $(this).data('foo'),
+          value: $(this).parent().next().data('foo')
         })
-      }else if($(this).prop('tagName') == 'INPUT'){
+      }else if($(this).prop('tagName') == 'INPUT'){ //If element is an input field
         inputs.push({
           key: $(this).attr('name'),
           attribute: $(this).val(),
