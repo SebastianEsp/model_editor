@@ -199,7 +199,7 @@ function getRegimeTitle(){
 function getLevelValue(){
     $result = [];
 
-    $choices = array('Formidling', 'Genbrug', 'Sammenhæng');
+    $choices = array('Dissemination', 'Reuse', 'Cohesion');
 
     for ($i=0; $i < sizeof($choices); $i++) { 
         $tmp = 'https://data.gov.dk/model/core/modellinglevel#' . $choices[$i];
