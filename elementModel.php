@@ -93,7 +93,7 @@ function getValue($choice){
     $tmp = [];
     $val = '';
 
-    $xml = simplexml_load_file('../xml/ModelTypes.rdf.xml');
+    $xml = simplexml_load_file('../../../model/core/modeltype.rdf');
 
     $tmp = $xml->xpath('//@rdf:about');
     $result = array_merge($result, $tmp);
@@ -107,11 +107,9 @@ function getValue($choice){
         $size = sizeof($tmp);
 
         if($size == 1 && $tmp[0] == $choice){
-            $val = 'http://data.gov.dk/model/concepts/ModelTypes#' . $test[$i];
+            $val = 'http://data.gov.dk/model/core/modeltype#' . $test[$i];
         }
     }
-
-    echo $val;
 
     return $val;
 }
@@ -122,7 +120,7 @@ function getTypeValue(){
     $choices = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = 'http://data.gov.dk/model/concepts/ModelTypes#' . $choices[$i];
+        $tmp = 'https://data.gov.dk/model/core/modeltype#' . $choices[$i];
         array_push($result, $tmp);    
     }
 
@@ -131,12 +129,12 @@ function getTypeValue(){
 
 function getTypeDescriptions(){
     $result = [];
-    $xml = simplexml_load_file('../xml/ModelTypes.rdf.xml');
+    $xml = simplexml_load_file('../../../model/core/modeltype.rdf');
 
     $attr = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
 
     for ($i=0; $i < sizeof($attr); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModelTypes#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modeltype#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
@@ -145,12 +143,12 @@ function getTypeDescriptions(){
 
 function getTypeTitle(){
     $result = [];
-    $xml = simplexml_load_file('../xml/ModelTypes.rdf.xml');
+    $xml = simplexml_load_file('../../../model/core/modeltype.rdf');
 
     $choices = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModelTypes#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modeltype#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
@@ -163,7 +161,7 @@ function getRegimeValue(){
     $choices = array('FODS', 'Grunddata', 'International');
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = 'http://data.gov.dk/model/concepts/ModelTypes#' . $choices[$i];
+        $tmp = 'https://data.gov.dk/model/core/modellingregime#' . $choices[$i];
         array_push($result, $tmp);    
     }
 
@@ -172,12 +170,12 @@ function getRegimeValue(){
 
 function getRegimeDescriptions(){
     $result = [];
-    $xml = simplexml_load_file('../xml/ModellingRegimes.rdf.xml');
+    $xml = simplexml_load_file('../../../model/core/modellingregime.rdf');
 
     $attr = array('FODS', 'Grunddata', 'International');
 
     for ($i=0; $i < sizeof($attr); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingRegimes#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellingregime#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
@@ -186,12 +184,12 @@ function getRegimeDescriptions(){
 
 function getRegimeTitle(){
     $result = [];
-    $xml = simplexml_load_file('../xml/ModellingRegimes.rdf.xml');
+    $xml = simplexml_load_file('../../../model/core/modellingregime.rdf');
 
     $choices = array('FODS', 'Grunddata', 'International');
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingRegimes#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellingregime#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
@@ -204,7 +202,7 @@ function getLevelValue(){
     $choices = array('Formidling', 'Genbrug', 'Sammenhæng');
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = 'http://data.gov.dk/model/concepts/ModelTypes#' . $choices[$i];
+        $tmp = 'https://data.gov.dk/model/core/modellinglevel#' . $choices[$i];
         array_push($result, $tmp);    
     }
 
@@ -213,12 +211,12 @@ function getLevelValue(){
 
 function getLevelDescriptions(){
     $result = [];
-    $xml = simplexml_load_file('../xml/ModellingLevels.rdf.xml');
+    $xml = simplexml_load_file('../../../model/core/modellinglevel.rdf');
 
-    $attr = array('Formidling', 'Genbrug', 'Sammenhæng');
+    $attr = array('Dissemination', 'Reuse', 'Cohesion');
 
     for ($i=0; $i < sizeof($attr); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingLevels#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellinglevel#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
@@ -227,12 +225,12 @@ function getLevelDescriptions(){
 
 function getLevelTitle(){
     $result = [];
-    $xml = simplexml_load_file('../xml/ModellingLevels.rdf.xml');
+    $xml = simplexml_load_file('../../../model/core/modellinglevel.rdf');
 
-    $choices = array('Formidling', 'Genbrug', 'Sammenhæng');
+    $choices = array('Dissemination', 'Reuse', 'Cohesion');
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="http://data.gov.dk/model/concepts/ModellingLevels#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellinglevel#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
