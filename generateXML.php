@@ -4,7 +4,7 @@
 
     //Defines the attribute namespace for each xml node type
     $attrResource = ["vcard:contactPoint", "adms:page","adms:landingPage", "dct:publisher", "dcat:dataset", 
-    "dct:hasVersion", "dct:isVersionOf", "dct:type", "mreg:modellingRegime", "mlev:modellingLevel", "dcat:theme", "adms:distribution",
+    "dct:hasVersion", "dct:isVersionOf", "dct:type", "mreg:modellingRegime", "mlev:modellingLevel", "dcat:theme", "dcat:distribution",
     "dcat:accessURL", "dct:license", "dct:format"];
     
     $attrLanguage = ["dct:title", "adms:versionNotes", "dct:description", "skos:altLabel", "dcat:keyword", 
