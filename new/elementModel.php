@@ -68,33 +68,33 @@ $preferredNamespacePrefix = new XMLElement('vann:', 'preferredNamespacePrefix', 
 $preferredNamespaceUri = new XMLElement('vann:', 'preferredNamespaceUri', '', '', '', false, true, 'singleColumn', false, false);
 $altLabel = new XMLElement('skos:', 'altLabel', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
 $description = new XMLElement('dct:', 'description', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow', true, false);
-$keyword = new XMLElement('dcat:', 'keyword', '', '', '', true, false, 'buttonSingle', true, false);
+$keyword = new XMLElement('dcat:', 'keyword', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
 $versionNotes = new XMLElement('adms:', 'versionNotes', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
 $versionInfo = new XMLElement('owl:', 'versionInfo', 'http://www.w3.org/2001/XMLSchema#decimal', '', '', true, false, 'doubleColumn', true, true);
 $identifier = new XMLElement('dct:', 'identifier', '', '', '', true, false, 'buttonDouble', false, false);
 $issued = new XMLElement('dct:', 'issued', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
 $modified = new XMLElement('dct:', 'modified', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
-$contactPoint = new XMLElement('vcard:', 'contactPoint', '', '', '', false, true, 'doubleColumn', false, false);    
+$contactPoint = new XMLElement('vcard:', 'contactPoint', '', '', '', false, false, 'doubleColumn', false, false);    
 $page = new XMLElement('adms:', 'page', '', '', '', true, false, 'buttonSingle', false, false);    
 $landingPage = new XMLElement('adms:', 'landingPage', '', '', '', false, false, 'singleColumn', false, false);    
 $publisher = new XMLElement('dct:', 'publisher', '', '', '', true, true, 'buttonSingle', false, false);   
 $dataset = new XMLElement('dcat:', 'dataset', '', '', '', true, false, 'buttonDouble', false, false);   
 $hasVersion = new XMLElement('dct:', 'hasVersion', '', '', '', true, false, 'buttonDouble', false, false);   
 $isVersionOf = new XMLElement('dct:', 'isVersionOf', '', '', '', false, false, 'doubleColumn', false, false);   
-$modelType = new XMLElement('dadk:', 'modelType', getTypeTitle(), getTypeValue(), getTypeDescriptions(), false, true, 'singleColumn', false, false); 
-$modellingRegime = new XMLElement('mreg:', 'modellingRegime', getRegimeTitle(), getRegimeValue(), getRegimeDescriptions(), false, true, 'singleColumn', false, false); 
-$modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelTitle(), getLevelValue(), getLevelDescriptions(), false, true, 'singleColumn', false, false); 
-$theme = new XMLElement('dcat:', 'theme', '', '', '', false, false, 'singleColumn', false, false); 
+$modelType = new XMLElement('dadk:', 'modelType', getTypeTitle(), getTypeValue(), getTypeDescriptions(), false, true, 'singleDropdown', false, false); 
+$modellingRegime = new XMLElement('mreg:', 'modellingRegime', getRegimeTitle(), getRegimeValue(), getRegimeDescriptions(), false, true, 'singleDropdown', false, false); 
+$modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelTitle(), getLevelValue(), getLevelDescriptions(), false, true, 'singleDropdown', false, false); 
+$theme = new XMLElement('dcat:', 'theme', getThemeTitle(), getThemeValue(), getThemeDescriptions(), false, false, 'singleDropdown', false, false); 
 $distribution = new XMLElement('dcat:', 'distribution', '', '', '', true, false, 'buttonSingle', false, false); 
 $fileSize = new XMLElement('schema:', 'fileSize', '', '', '', false, false, 'doubleColumn', false, false);
 $accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn', false, false);
-$license = new XMLElement('cc:', 'license', '', '', '', true, true, 'singleColumn', false, false);  
+$license = new XMLElement('cc:', 'license', '', '', '', true, false, 'singleColumn', false, false);  
 $format = new XMLElement('dct:', 'format', '', '', '', false, false, 'singleColumn', false, false);
 $rights = new XMLElement('dct:', 'rights', '', '', '', false, false, 'singleColumn', false, false);
 $businessArea = new XMLElement('dadk:', 'businessArea', '', '', '', false, false, 'singleColumn', false, false);
 $businessAreaCode = new XMLElement('dadk:', 'businessAreaCode', '', '', '', false, false, 'singleColumn', false, false);  
-$dctType = new XMLElement('dct:', 'type', '', '', '', false, false, 'singleColumn', false, false);  
-$rdfType = new XMLElement('rdf:', 'type', '', '', '', false, false, 'singleColumn', false, false);  
+$dctType = new XMLElement('dct:', 'type', 'http://data.europa.eu/dr8/CoreDataModel', '', '', false, false, 'singleColumn', true, false);  
+$rdfType = new XMLElement('rdf:', 'type', array('http://www.w3.org/ns/dcat#Dataset', 'http://www.w3.org/ns/dcat#Distribution'), '', '', false, false, 'singleColumn', true, false);  
 
 function getValue($choice){
     $result = [];
@@ -239,6 +239,47 @@ function getLevelTitle(){
 
     for ($i=0; $i < sizeof($choices); $i++) { 
         $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellinglevel#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getThemeValue(){
+    $result = [];
+
+    $choices = array('AGRI', 'ECON', 'EDUC', 'ENER', 'ENVI', 'GOVE', 'HEAL', 'INTR', 'JUST', 'REGI', 'SOCI', 'TECH', 'TRAN', 'OP_DATPRO');
+
+    for ($i=0; $i < sizeof($choices); $i++) { 
+        $tmp = 'http://publications.europa.eu/resource/authority/data-theme/' . $choices[$i];
+        array_push($result, $tmp);    
+    }
+
+    return $result;
+}
+
+function getThemeDescriptions(){
+    $result = [];
+    $xml = simplexml_load_file('../../xml/data-theme-skos-ap-act.rdf');
+
+    $attr = array('AGRI', 'ECON', 'EDUC', 'ENER', 'ENVI', 'GOVE', 'HEAL', 'INTR', 'JUST', 'REGI', 'SOCI', 'TECH', 'TRAN', 'OP_DATPRO');
+
+    for ($i=0; $i < sizeof($attr); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/skos:Concept[@rdf:about="http://publications.europa.eu/resource/authority/data-theme/' . $attr[$i] . '"]/skos:definition[@xml:lang="en"]');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getThemeTitle(){
+    $result = [];
+    $xml = simplexml_load_file('../../xml/data-theme-skos-ap-act.rdf');
+
+    $choices = array('AGRI', 'ECON', 'EDUC', 'ENER', 'ENVI', 'GOVE', 'HEAL', 'INTR', 'JUST', 'REGI', 'SOCI', 'TECH', 'TRAN', 'OP_DATPRO');
+
+    for ($i=0; $i < sizeof($choices); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/skos:Concept[@rdf:about="http://publications.europa.eu/resource/authority/data-theme/' . $choices[$i] . '"]/dc:identifier');
         $result = array_merge($result, $tmp);   
     }
 

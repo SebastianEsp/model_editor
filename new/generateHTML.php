@@ -5,7 +5,7 @@ $genNum = $_POST['num'];
 
 function generateDropdown($element){
 
-    $dropdown_1 =  '<div class="dropdown">
+    $dropdown_1 =  '<div class="dropdown dropdown-scroll-new">
                     <a class="btn btn-secondary dropdown-toggle inputField" href="#" name="'. $element->prefix . $element->name .'" role="input" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                
                         Attribute
                     </a>
@@ -70,8 +70,8 @@ function generateModelForm(){
     global $genNum;
 
     $elements = array($title, $description, $preferredNamespacePrefix, $preferredNamespaceUri, $altLabel, 
-    $keyword, $versionNotes, $versionInfo, $identifier, $issued, $modified, $contactPoint, $page, $landingPage,
-    $publisher, $dataset, $hasVersion, $isVersionOf, $rdfType, $dctType, $license, $rights, $modelType, $modellingRegime, $modellingLevel, $businessArea, $businessAreaCode, $theme, $distribution);
+    $keyword, $versionNotes, $versionInfo, /*$identifier,*/ $issued, $modified, $contactPoint, $page, $landingPage,
+    $publisher, /*$dataset,*/ $hasVersion, $isVersionOf, $rdfType, $dctType, $license, $rights, $modelType, $modellingRegime, $modellingLevel, $businessArea, $businessAreaCode, $theme, $distribution);
 
     switch($genNum){
         case 'first':
@@ -103,11 +103,22 @@ function generateElement($element){
             echo ' 
             <div class="form-group row no-gutters"> <!--type-->  
             <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">' . $element->name . (($element->isRequired==true)?'*':'') .'</label>
-                <div class="input-group col-sm-10">'
-                .((is_array($element->attribute) == false)? '<input type="'.(($element->value=='date')?'date':'text').'" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" '.(($element->value=='date')?'':'onfocus="expandInput(this)"') .'id="'. $element->name .'_attribute_input"' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute">':generateDropdown($element)) .'       
+                <div class="input-group col-sm-10"> 
+                        <input type="'.(($element->value=='date')?//If value field is == date, create add a datepicker
+                            'date'
+                        :'text').//Else mark as text element
+                        '" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" '.(($element->value=='date')?'':'onfocus="expandInput(this)"') .'id="'. $element->name .'_attribute_input"' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled':'').'>
                 </div>
             </div>';
         //Generate html element with two input fields for xml attribute and value and a button to dynamically add additional copies of this element
+        }else if($element->columns == 'singleDropdown'){
+            echo ' 
+            <div class="form-group row no-gutters"> <!--type-->  
+            <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">' . $element->name . (($element->isRequired==true)?'*':'') .'</label>
+                <div class="input-group col-sm-10">'
+                    .generateDropdown($element).
+                '</div>
+            </div>';
         }else if($element->columns == 'buttonDouble'){
             echo '
             <div class="form-group row no-gutters justify-content-end"> <!--Form group with dynamic adding and removal of inputs-->

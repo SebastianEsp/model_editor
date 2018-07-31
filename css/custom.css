@@ -72,9 +72,22 @@ input{
     display: content;
 }
 
+.dropdown-scroll-new{
+    min-height:50vh; 
+    overflow-y :auto; 
+    overflow-x:hidden; 
+    position:absolute;
+    width: 250px;
+    display: content;
+}
+
+.dropdown-item-new{
+    width: 250px;
+}
+
 .dropdown-menu{
     transform: none !important;
-}
+}       
 
 .dropdown-item:hover {
     background-color: #ddd;

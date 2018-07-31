@@ -8,12 +8,12 @@
     "dcat:accessURL", "cc:license", "dct:format", "dct:type", "rdf:type"];
     
     $attrLanguage = ["dct:title", "adms:versionNotes", "dct:description", "skos:altLabel", 
-    "adms:versionNotes"];
+    "adms:versionNotes", "dcat:keyword"];
     
     $attrDatatype = ["dct:issued", "dct:modified", "dct:format", "schema:fileSize"];
     
     $attrNone = ["vann:preferredNamespacePrefix", "vann:preferredNamespaceUri", "dct:rights", "dadk:businessArea", 
-    "dadk:businessAreaCode", "dct:identifier", "owl:versionInfo", "dcat:keyword"];
+    "dadk:businessAreaCode", "dct:identifier", "owl:versionInfo"];
 
     //Remove ending <rdf:RDF> tag from XML document
     $lines = file('../../xml/modelkatalog.rdf.xml'); 

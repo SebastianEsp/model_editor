@@ -42,11 +42,17 @@ $( document ).ready(function() {
 
 //Click event handler
 $(document).click(function(event) {
+  console.log(event.target);
   if($(event.target).hasClass('dropdown-item')) //If click target is a dropdown item, set the innerhtml, value and data-* attributes of the parent
   {
+    $( event.target ).parent().parent().css('z-index', 'auto');
     $( event.target ).parent().parent().children(':first-child').text($(event.target).text());
     $( event.target ).parent().parent().children(':first-child').attr('Value', ($(event.target).text()));
     $( event.target ).parent().parent().children(':first-child').data('foo', ($(event.target).data('foo')));
+  }
+  else if($(event.target).hasClass('dropdown-toggle')){
+    console.log('TEST');
+    $( event.target ).parent().css('z-index', 10);
   }
 });
 
@@ -80,8 +86,9 @@ $(function()
       //Find each input field of the new element. If the disabled property is not set the value should be removed
       //This means that an element with already filled out fields will not have their values copied unless, the input field is marked disabled
       newEntry.find('input').each(function() {
-        if($(this).prop('disabled') == false){
-          $(this).val('');
+        if($(this).prop('disabled') == false){ //TODO Fix wrongful removal of value when expanded textarea is used.
+          //console.log($(this));
+          //$(this).val('');
         }  
       });
 
@@ -164,85 +171,11 @@ function submitForm(btn){
   );
 }; 
 
-function getModelFromTitle(title){
-  $.post(
-    "getSpecificModel.php",   
-    {data: title},
-    function(data, status){
-      $('.modeldisplay').html(data);
-    }
-  );
-}
-
-function resizeInput() {
-  $(this).attr('size', $(this).val().length);
-}
-
-//Adds a search bar to the dropdown menu, which allows filtering if the menu items
-function dropdownSearch() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("dropdown_search");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("dropdown_search_hook");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
-} 
-
-//Dynamically expands a textarea to fit it's contents
-$('textarea').on('keydown', function(e){
-  if(e.which == 13) {e.preventDefault();}
-}).on('input', function(){
-  $(this).height(1);
-  var totalHeight = $(this).prop('scrollHeight') - parseInt($(this).css('padding-top')) - parseInt($(this).css('padding-bottom'));
-  $(this).height(totalHeight);
-});
-
-var selectedInput;
-
-//When input field is focused expand to textarea
-function expandInput(sender){
-  document.getElementById("overlay").style.display = "block";
-  selectedInput = sender;
-  var selectedVal = sender.value;
-  $('.expanded-input textarea').val(selectedVal);
-  $('.expanded-input').css('visibility', 'visible');
-}
-
-//When textarea loose focus remove overlay and save changes
-function lostFocus(sender){
-  document.getElementById("overlay").style.display = "none";
-  selectedInput.value = sender.value
-  sender.value = '';
-  $('.expanded-input').css('visibility', 'hidden');
-}
-
-$('input[type="text"]')
-  // event handler
-  .keyup(resizeInput)
-  // resize on page load
-  .each(resizeInput);
-
-var lastScrollTop = 0
-var scrollPercentage = 10;
 var scroll;
 //Scroll event handler. Dynamically moves the input input box along wiht the scroll bar
 $( window ).scroll(function() {
-  var scroll = $(window).scrollTop();
-  if (scroll > lastScrollTop){
-    //If scrolling down
-    $(".expanded-input textarea").css("top", scroll);
-    console.log(scrollPercentage);
-  } else {
-    //If scrolling up
-    $(".expanded-input textarea").css("top", scroll);
-  }
-  lastScrollTop = st;
+  scroll = $(this).scrollTop();
+  $(".expanded-input textarea").css("top", scroll);
 });
 
 var selectedInput;
@@ -251,6 +184,7 @@ function expandInput(sender){
   document.getElementById("overlay").style.display = "block";
   selectedInput = $(sender);
   var selectedVal = sender.value;
+  console.log(selectedInput);
   $('.expanded-input textarea').val(selectedVal);
   $('.expanded-input').css('visibility', 'visible');
   $(".expanded-input textarea").css("top", scroll);
@@ -259,7 +193,9 @@ function expandInput(sender){
 //When textarea loose focus remove overlay and save changes
 function lostFocus(sender){
   document.getElementById("overlay").style.display = "none";
+  console.log($(sender).val());
   selectedInput.attr('value', $(sender).val());
+  selectedInput.text($(sender).val());
   sender.value = '';
   $('.expanded-input').css('visibility', 'hidden');
 }
