@@ -83,6 +83,7 @@ function expandInput(sender){
   document.getElementById("overlay").style.display = "block";
   selectedInput = $(sender);
   var selectedVal = sender.value;
+  $(selectedInput).prop('disabled', true);
   $('.expanded-input textarea').val(selectedVal);
   $('.expanded-input').css('visibility', 'visible');
   $(".expanded-input textarea").css("margin-top", '0%');
@@ -92,6 +93,7 @@ function expandInput(sender){
 //When textarea loose focus remove overlay and save changes
 function lostFocus(sender){
   document.getElementById("overlay").style.display = "none";
+  $(selectedInput).prop('disabled', false);
   selectedInput.attr('value', $(sender).val());
   sender.value = '';
   $('.expanded-input').css('visibility', 'hidden');

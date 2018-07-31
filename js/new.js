@@ -185,6 +185,7 @@ function expandInput(sender){
   selectedInput = $(sender);
   var selectedVal = sender.value;
   console.log(selectedInput);
+  $(selectedInput).prop('disabled', true);
   $('.expanded-input textarea').val(selectedVal);
   $('.expanded-input').css('visibility', 'visible');
   $(".expanded-input textarea").css("top", scroll);
@@ -194,6 +195,7 @@ function expandInput(sender){
 function lostFocus(sender){
   document.getElementById("overlay").style.display = "none";
   console.log($(sender).val());
+  $(selectedInput).prop('disabled', false);
   selectedInput.attr('value', $(sender).val());
   selectedInput.text($(sender).val());
   sender.value = '';
