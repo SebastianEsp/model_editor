@@ -10,7 +10,7 @@ public $value;
 public $hasMultiplicity;
 public $isRequired;
 public $columns;
-public $descriptionLabel;
+public $titelLabel;
 public $ReadOnly;
 public $Hidden;
 
@@ -33,7 +33,7 @@ public $publisher;
 public $dataset;
 public $hasVersion;
 public $isVersionOf;
-public $type;
+public $modelType;
 public $modellingRegime;
 public $modellingLevel;
 public $theme;
@@ -42,20 +42,23 @@ public $fileSize;
 public $accessURL;
 public $license;
 public $format;
+public $rights;
+public $rdfType;
+public $dctType;
 
 
     //Defines the properties of a valid xml element
-    public function __construct($Prefix, $Name, $Attribute, $Value, $DescriptionLabel, $HasMultiplicity, $IsRequired, $Columns, $ReadOnly, $Hidden) {
-        $this->prefix = $Prefix;
-        $this->name = $Name;
-        $this->attribute = $Attribute;
-        $this->value = $Value;
-        $this->descriptionLabel = $DescriptionLabel;
-        $this->hasMultiplicity = $HasMultiplicity;
-        $this->isRequired = $IsRequired;
-        $this->columns = $Columns;
-        $this->readOnly = $ReadOnly;
-        $this->hidden = $Hidden;
+    public function __construct($Prefix, $Name, $Attribute, $Value, $TitelLabel, $HasMultiplicity, $IsRequired, $Columns, $ReadOnly, $Hidden) {
+        $this->prefix = $Prefix; //Defines xml prefix
+        $this->name = $Name; //Defines element name
+        $this->attribute = $Attribute; //Use whenever an xml-element always has a specific xml-attribute
+        $this->value = $Value; //Used to define custom data-* attributes. Precently used to give a field a datepicker.
+        $this->titelLabel = $TitelLabel; //Use to define the title attribute when generating an HTML-element
+        $this->hasMultiplicity = $HasMultiplicity; //Defines if the editor should allow for multiple fields of the same element
+        $this->isRequired = $IsRequired; //Defines whether or not the element must contain a value or attribute
+        $this->columns = $Columns; //Defines the type of HTML-element the editor must create for the xml-element 
+        $this->readOnly = $ReadOnly; //Defines whether or not a field in the editor can be edited
+        $this->hidden = $Hidden; //Defines whether or not a field is visible
     }
 }
 
@@ -65,9 +68,9 @@ $preferredNamespacePrefix = new XMLElement('vann:', 'preferredNamespacePrefix', 
 $preferredNamespaceUri = new XMLElement('vann:', 'preferredNamespaceUri', '', '', '', false, true, 'singleColumn', false, false);
 $altLabel = new XMLElement('skos:', 'altLabel', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
 $description = new XMLElement('dct:', 'description', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow', true, false);
-$keyword = new XMLElement('dcat:', 'keyword', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
+$keyword = new XMLElement('dcat:', 'keyword', '', '', '', true, false, 'buttonSingle', true, false);
 $versionNotes = new XMLElement('adms:', 'versionNotes', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
-$versionInfo = new XMLElement('owl:', 'versionInfo', '', '', '', true, false, 'buttonDouble', false, false);
+$versionInfo = new XMLElement('owl:', 'versionInfo', 'http://www.w3.org/2001/XMLSchema#decimal', '', '', true, false, 'doubleColumn', true, true);
 $identifier = new XMLElement('dct:', 'identifier', '', '', '', true, false, 'buttonDouble', false, false);
 $issued = new XMLElement('dct:', 'issued', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
 $modified = new XMLElement('dct:', 'modified', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
@@ -78,22 +81,27 @@ $publisher = new XMLElement('dct:', 'publisher', '', '', '', true, true, 'button
 $dataset = new XMLElement('dcat:', 'dataset', '', '', '', true, false, 'buttonDouble', false, false);   
 $hasVersion = new XMLElement('dct:', 'hasVersion', '', '', '', true, false, 'buttonDouble', false, false);   
 $isVersionOf = new XMLElement('dct:', 'isVersionOf', '', '', '', false, false, 'doubleColumn', false, false);   
-$type = new XMLElement('dct:', 'type', getTypeTitle(), getTypeValue(), getTypeDescriptions(), false, true, 'singleColumn', false, false); 
+$modelType = new XMLElement('dadk:', 'modelType', getTypeTitle(), getTypeValue(), getTypeDescriptions(), false, true, 'singleColumn', false, false); 
 $modellingRegime = new XMLElement('mreg:', 'modellingRegime', getRegimeTitle(), getRegimeValue(), getRegimeDescriptions(), false, true, 'singleColumn', false, false); 
 $modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelTitle(), getLevelValue(), getLevelDescriptions(), false, true, 'singleColumn', false, false); 
 $theme = new XMLElement('dcat:', 'theme', '', '', '', false, false, 'singleColumn', false, false); 
 $distribution = new XMLElement('dcat:', 'distribution', '', '', '', true, false, 'buttonSingle', false, false); 
 $fileSize = new XMLElement('schema:', 'fileSize', '', '', '', false, false, 'doubleColumn', false, false);
 $accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn', false, false);
-$license = new XMLElement('dct:', 'license', '', '', '', true, true, 'singleColumn', false, false);  
-$format = new XMLElement('dct:', 'format', '', '', '', false, false, 'singleColumn', false, false);  
+$license = new XMLElement('cc:', 'license', '', '', '', true, true, 'singleColumn', false, false);  
+$format = new XMLElement('dct:', 'format', '', '', '', false, false, 'singleColumn', false, false);
+$rights = new XMLElement('dct:', 'rights', '', '', '', false, false, 'singleColumn', false, false);
+$businessArea = new XMLElement('dadk:', 'businessArea', '', '', '', false, false, 'singleColumn', false, false);
+$businessAreaCode = new XMLElement('dadk:', 'businessAreaCode', '', '', '', false, false, 'singleColumn', false, false);  
+$dctType = new XMLElement('dct:', 'type', '', '', '', false, false, 'singleColumn', false, false);  
+$rdfType = new XMLElement('rdf:', 'type', '', '', '', false, false, 'singleColumn', false, false);  
 
 function getValue($choice){
     $result = [];
     $tmp = [];
     $val = '';
 
-    $xml = simplexml_load_file('../../../model/core/modeltype.rdf');
+    $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
 
     $tmp = $xml->xpath('//@rdf:about');
     $result = array_merge($result, $tmp);
@@ -129,7 +137,7 @@ function getTypeValue(){
 
 function getTypeDescriptions(){
     $result = [];
-    $xml = simplexml_load_file('../../../model/core/modeltype.rdf');
+    $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
 
     $attr = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
 
@@ -143,7 +151,7 @@ function getTypeDescriptions(){
 
 function getTypeTitle(){
     $result = [];
-    $xml = simplexml_load_file('../../../model/core/modeltype.rdf');
+    $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
 
     $choices = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
 
@@ -170,7 +178,7 @@ function getRegimeValue(){
 
 function getRegimeDescriptions(){
     $result = [];
-    $xml = simplexml_load_file('../../../model/core/modellingregime.rdf');
+    $xml = simplexml_load_file('../../../../model/core/modellingregime.rdf');
 
     $attr = array('FODS', 'Grunddata', 'International');
 
@@ -184,7 +192,7 @@ function getRegimeDescriptions(){
 
 function getRegimeTitle(){
     $result = [];
-    $xml = simplexml_load_file('../../../model/core/modellingregime.rdf');
+    $xml = simplexml_load_file('../../../../model/core/modellingregime.rdf');
 
     $choices = array('FODS', 'Grunddata', 'International');
 
@@ -211,7 +219,7 @@ function getLevelValue(){
 
 function getLevelDescriptions(){
     $result = [];
-    $xml = simplexml_load_file('../../../model/core/modellinglevel.rdf');
+    $xml = simplexml_load_file('../../../../model/core/modellinglevel.rdf');
 
     $attr = array('Dissemination', 'Reuse', 'Cohesion');
 
@@ -225,7 +233,7 @@ function getLevelDescriptions(){
 
 function getLevelTitle(){
     $result = [];
-    $xml = simplexml_load_file('../../../model/core/modellinglevel.rdf');
+    $xml = simplexml_load_file('../../../../model/core/modellinglevel.rdf');
 
     $choices = array('Dissemination', 'Reuse', 'Cohesion');
 

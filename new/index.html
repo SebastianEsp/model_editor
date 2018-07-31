@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../js/jquery-3.3.1.js"></script>
+        <script src="../js/jqueryUI/jquery-ui.js"></script>
+        <script src="../js/jquery.steps.js"></script>
+        <script src="../js/new.js"></script>
+        <script src="../js/popper.min.js"></script>
+        <script src="../js/bootstrap/bootstrap.js"></script>
+        <script src="../icons/fontawesome/svg-with-js/js/fontawesome-all.js"></script> 
+
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="../css/jqueryUI/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="../css/jqueryUI/jquery-ui.theme.css">
+        <link rel="stylesheet" type="text/css" href="../css/custom.css">
+        <link rel="stylesheet" type="text/css" href="../css/jqueryUI/steps.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="UTF-8"> 
+        <title>Create new model</title>
+    </head>
+
+    <body>
+        <div class="expanded-input center">
+            <textarea onblur="lostFocus(this);" item-height="200" item-width="300"></textarea>
+        </div>  
+        <div id="overlay"></div>
+        <div class="container-fluid xmlForm">
+            <div id="wizard">
+                <h1>Model</h1>
+                <div>
+                    <form class="needs-validation" method="POST" id="myForm" onsubmit="submitForm(this); return false;">
+                        <div class="row justify-content-between">
+                            <div class="col modelGeneratorFirst">
+
+                            </div>
+                            <div class="col modelGeneratorSecond">
+
+                            </div>
+                        </div>
+                        <button class="btn btn-primary formSubmit" type="submit" name="submitModel">Submit form</button>
+                    </form>
+                </div>
+             
+                <h1>Udgivelse</h1>
+                <div>
+                    <form class="needs-validation" method="POST" id="myForm" onsubmit="submitForm(this); return false;">
+                        <div class="row justify-content-between">
+                            <div class="col distributionGeneratorFirst">
+                                
+                            </div>
+                            <div class="col distributionGeneratorSecond">
+        
+                            </div>
+                        </div>
+                        <button class="btn btn-primary formSubmit" type="submit" name="submitDistribution">Submit form</button>
+                    </form>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="center">
+        <a href="../../xml/modelkatalog.rdf.xml" download>View XML output</a>
+      </div>
+    </body>
+</html> 

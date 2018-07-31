@@ -1,40 +1,43 @@
 //Dynamicly add more input fields for input groups with the .entry class
 $( document ).ready(function() {
+
+  document.getElementById("overlay").style.display = "none";
+
   $("#wizard").steps();
 
   var modelGeneratorFirstEntry = $('.modelGeneratorFirst');
   var modelGeneratorSecondEntry = $('.modelGeneratorSecond');
 
   $.post(
-    "generateHTML.php",
+    "../new/generateHTML.php",
     {data: "ModelForm", num: "first"},
     function(data, status){
       modelGeneratorFirstEntry.append(data);
     });
 
-    $.post(
-      "generateHTML.php",
-      {data: "ModelForm", num: "second"},
-      function(data, status){
-        modelGeneratorSecondEntry.append(data);
-      });
+  $.post(
+    "../new/generateHTML.php",
+    {data: "ModelForm", num: "second"},
+    function(data, status){
+      modelGeneratorSecondEntry.append(data);
+    });
 
   var distributionGeneratorFirstEntry = $('.distributionGeneratorFirst');
   var distributionGeneratorSecondEntry = $('.distributionGeneratorSecond');
 
   $.post(
-    "generateHTML.php",
+    "../new/generateHTML.php",
     {data: "DistributionForm", num: "first"},
     function(data, status){
       distributionGeneratorFirstEntry.append(data);
     });
 
-    $.post(
-      "generateHTML.php",
-      {data: "DistributionForm", num: "second"},
-      function(data, status){
-        distributionGeneratorSecondEntry.append(data);
-      });
+  $.post(
+    "../new/generateHTML.php",
+    {data: "DistributionForm", num: "second"},
+    function(data, status){
+      distributionGeneratorSecondEntry.append(data);
+    });
 });
 
 //Click event handler
@@ -161,8 +164,62 @@ function submitForm(btn){
   );
 }; 
 
+function getModelFromTitle(title){
+  $.post(
+    "getSpecificModel.php",   
+    {data: title},
+    function(data, status){
+      $('.modeldisplay').html(data);
+    }
+  );
+}
+
 function resizeInput() {
   $(this).attr('size', $(this).val().length);
+}
+
+//Adds a search bar to the dropdown menu, which allows filtering if the menu items
+function dropdownSearch() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("dropdown_search");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("dropdown_search_hook");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+} 
+
+//Dynamically expands a textarea to fit it's contents
+$('textarea').on('keydown', function(e){
+  if(e.which == 13) {e.preventDefault();}
+}).on('input', function(){
+  $(this).height(1);
+  var totalHeight = $(this).prop('scrollHeight') - parseInt($(this).css('padding-top')) - parseInt($(this).css('padding-bottom'));
+  $(this).height(totalHeight);
+});
+
+var selectedInput;
+
+//When input field is focused expand to textarea
+function expandInput(sender){
+  document.getElementById("overlay").style.display = "block";
+  selectedInput = sender;
+  var selectedVal = sender.value;
+  $('.expanded-input textarea').val(selectedVal);
+  $('.expanded-input').css('visibility', 'visible');
+}
+
+//When textarea loose focus remove overlay and save changes
+function lostFocus(sender){
+  document.getElementById("overlay").style.display = "none";
+  selectedInput.value = sender.value
+  sender.value = '';
+  $('.expanded-input').css('visibility', 'hidden');
 }
 
 $('input[type="text"]')
@@ -170,3 +227,39 @@ $('input[type="text"]')
   .keyup(resizeInput)
   // resize on page load
   .each(resizeInput);
+
+var lastScrollTop = 0
+var scrollPercentage = 10;
+var scroll;
+//Scroll event handler. Dynamically moves the input input box along wiht the scroll bar
+$( window ).scroll(function() {
+  var scroll = $(window).scrollTop();
+  if (scroll > lastScrollTop){
+    //If scrolling down
+    $(".expanded-input textarea").css("top", scroll);
+    console.log(scrollPercentage);
+  } else {
+    //If scrolling up
+    $(".expanded-input textarea").css("top", scroll);
+  }
+  lastScrollTop = st;
+});
+
+var selectedInput;
+//When input field is focused expand to textarea
+function expandInput(sender){
+  document.getElementById("overlay").style.display = "block";
+  selectedInput = $(sender);
+  var selectedVal = sender.value;
+  $('.expanded-input textarea').val(selectedVal);
+  $('.expanded-input').css('visibility', 'visible');
+  $(".expanded-input textarea").css("top", scroll);
+}
+
+//When textarea loose focus remove overlay and save changes
+function lostFocus(sender){
+  document.getElementById("overlay").style.display = "none";
+  selectedInput.attr('value', $(sender).val());
+  sender.value = '';
+  $('.expanded-input').css('visibility', 'hidden');
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../js/jquery-3.3.1.js"></script>
+        <script src="../js/jqueryUI/jquery-ui.js"></script>
+        <script src="../js/jquery.steps.js"></script>
+        <script src="../js/edit.js"></script>
+        <script src="../js/popper.min.js"></script>
+        <script src="../js/bootstrap/bootstrap.js"></script>
+        <script src="../icons/fontawesome/svg-with-js/js/fontawesome-all.js"></script> 
+
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="../css/jqueryUI/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="../css/jqueryUI/jquery-ui.theme.css">
+        <link rel="stylesheet" type="text/css" href="../css/custom.css">
+        <link rel="stylesheet" type="text/css" href="../css/jqueryUI/steps.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="UTF-8"> 
+        <title>Edit existing model</title>
+    </head>
+
+    <body>
+        <div class="header-container center">
+            <div class="dropdownGenerator center child-small"></div>
+            <div class="child-medium">
+                <H1>Edit existing model</H1>
+                <p>Choose an existing model from the dropdown menu to begin editing</p>
+            </div>
+            <div class="center child-small left-padding">
+                <button type="button" class="btn btn-primary" onclick="saveChanges();">Save changes</button>
+            </div>
+        </div>
+            <div class="container">
+
+            <div class="expanded-input center">
+                <textarea onblur="lostFocus(this);" item-height="200" item-width="300"></textarea>
+            </div>  
+            <div id="overlay"></div>
+
+            <div class="modeldisplay child-large center">
+
+            </div>
+        </div>
+
+        <script>
+            (function() {
+                $.post(
+                    "getModels.php",
+                    function(data, status){
+                        $('.dropdownGenerator').append(data);
+                    });
+            })();
+        </script>
+    </body>
+
+</html>
