@@ -93,8 +93,8 @@ $format = new XMLElement('dct:', 'format', '', '', '', false, false, 'singleColu
 $rights = new XMLElement('dct:', 'rights', '', '', '', false, false, 'singleColumn', false, false);
 $businessArea = new XMLElement('dadk:', 'businessArea', '', '', '', false, false, 'singleColumn', false, false);
 $businessAreaCode = new XMLElement('dadk:', 'businessAreaCode', '', '', '', false, false, 'singleColumn', false, false);  
-$dctType = new XMLElement('dct:', 'type', 'http://data.europa.eu/dr8/CoreDataModel', '', '', false, false, 'singleColumn', true, false);  
-$rdfType = new XMLElement('rdf:', 'type', array('http://www.w3.org/ns/dcat#Dataset', 'http://www.w3.org/ns/dcat#Distribution'), '', '', false, false, 'singleColumn', true, false);  
+$dctType = new XMLElement('dct:', 'type', 'http://data.europa.eu/dr8/CoreDataModel', '', '', false, false, 'typeColumn', true, false);  
+$rdfType = new XMLElement('rdf:', 'type', array('http://www.w3.org/ns/dcat#Dataset', 'http://www.w3.org/ns/dcat#Distribution'), '', '', false, false, 'typeColumn', true, false);  
 
 function getValue($choice){
     $result = [];

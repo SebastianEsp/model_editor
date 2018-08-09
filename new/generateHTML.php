@@ -2,6 +2,7 @@
 
 $genType = $_POST['data'];
 $genNum = $_POST['num'];
+$elements;
 
 function generateDropdown($element){
 
@@ -52,7 +53,8 @@ function generateDistributionForm(){
     include_once 'elementModel.php';
     global $genNum;
 
-    $elements = array($title, $description, $accessURL, $fileSize, $type, $issued, $license, $format);
+    global $elements; 
+    $elements = array($title, $description, $accessURL, $fileSize, $rdfType, $issued, $license, $format);
 
     switch($genNum){
         case 'first':
@@ -68,6 +70,8 @@ function generateModelForm(){
 
     include_once 'elementModel.php';
     global $genNum;
+
+    global $elements;
 
     $elements = array($title, $description, $preferredNamespacePrefix, $preferredNamespaceUri, $altLabel, 
     $keyword, $versionNotes, $versionInfo, /*$identifier,*/ $issued, $modified, $contactPoint, $page, $landingPage,
@@ -87,6 +91,7 @@ function generateModelForm(){
 //An element may be labeled as required, as well as contain a drop down list as defined by the inline if expressions
 function generateElement($element){
     global $dropdown;
+    global $elements;
 
         //Generate html element with two input fields for xml attribute and value
         if( $element->columns == 'doubleColumn'){
@@ -110,6 +115,14 @@ function generateElement($element){
                         '" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" '.(($element->value=='date')?'':'onfocus="expandInput(this)"') .'id="'. $element->name .'_attribute_input"' . ((is_array($element->attribute))?'value='. "'" . (string)$element->attribute[0] . "'" .'':'value='. "'" . (string)$element->attribute . "'" .'') . ' placeholder="Attribute"' . (($element->readOnly==true)?'disabled':'').'>
                 </div>
             </div>';
+        }else if($element->columns == 'typeColumn'){ //Special case for the type fields
+                echo ' 
+                <div class="form-group row no-gutters"> <!--type-->  
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="'. $element->name .'_attribute_input">' . $element->prefix . $element->name . (($element->isRequired==true)?'*':'') .'</label>
+                    <div class="input-group col-sm-10"> 
+                            <input type="text" name="'. $element->prefix . $element->name .'" class="form-control form-control-sm inputField" id="'. $element->name .'_attribute_input" value="'.((is_array($element->attribute))?''.((sizeof($elements) > 10))?(string)$element->attribute[0]:(string)$element->attribute[1].'':(string)$element->attribute).'" placeholder="Attribute"' . (($element->readOnly==true)?'disabled':'').'>
+                    </div>
+                </div>';
         //Generate html element with two input fields for xml attribute and value and a button to dynamically add additional copies of this element
         }else if($element->columns == 'singleDropdown'){
             echo ' 
