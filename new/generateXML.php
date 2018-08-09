@@ -28,7 +28,7 @@
     //echo var_dump($data);
 
     //Add </rdf:Description node to XML document>
-    $xmlTmp = '<rdf:Description ' . ((multiKeyExists($data, 'vann:preferredNamespaceUri'))?'rdf:about="' . $data[5]['attribute'] : 'rdf:about="' . $data[1]['attribute'] ) . '">' . PHP_EOL;
+    $xmlTmp = '<rdf:Description ' . ((multiKeyExists($data, 'vann:preferredNamespaceUri'))?'rdf:about="' . $data[5]['attribute'] : 'rdf:about="' . $data[4]['attribute'] ) . '">' . PHP_EOL;
     file_put_contents('../../xml/modelkatalog.rdf.xml',$xmlTmp, FILE_APPEND);
 
     //For each child XML element of <rdf:Description> add element to XML document
