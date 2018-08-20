@@ -10,13 +10,12 @@ function generateDropdown($element){
                     <a class="btn btn-secondary dropdown-toggle inputField" href="#" name="'. $element->prefix . $element->name .'" role="input" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                
                         Attribute
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown">'; 
+                    <div class="dropdown-menu dropdown-menu-new" aria-labelledby="dropdown">'; 
     
     $dropdown_2 = '';
     for ($i=0; $i < sizeof($element->attribute); $i++) { 
-        //$tmp .= $element.getValue('Model');
 
-        $dropdown_2 = $dropdown_2 . '<a class="dropdown-item" title="'. $element->titelLabel[$i]  .'" href="javascript:;" data-foo="'. $element->value[$i]  .'">' . $element->attribute[$i] .'</a>';
+        $dropdown_2 = $dropdown_2 . '<a class="dropdown-item dropdown-item-new" title="'. $element->titelLabel[$i]  .'" href="javascript:;" data-foo="'. $element->value[$i]  .'">' . $element->attribute[$i] .'</a>';
     }
     
     $dropdown_3 = '</div>
@@ -54,7 +53,7 @@ function generateDistributionForm(){
     global $genNum;
 
     global $elements; 
-    $elements = array($title, $description, $accessURL, $fileSize, $rdfType, $issued, $license, $format);
+    $elements = array($title, $description, $accessURL, $fileSize, $format, $rdfType, $issued, $license);
 
     switch($genNum){
         case 'first':

@@ -89,7 +89,7 @@ $distribution = new XMLElement('dcat:', 'distribution', '', '', '', true, false,
 $fileSize = new XMLElement('schema:', 'fileSize', '', '', '', false, false, 'doubleColumn', false, false);
 $accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn', false, false);
 $license = new XMLElement('cc:', 'license', '', '', '', true, false, 'singleColumn', false, false);  
-$format = new XMLElement('dct:', 'format', '', '', '', false, false, 'singleColumn', false, false);
+$format = new XMLElement('dct:', 'format', getFormatTitle(), getFormatValue(), getFormatDescriptions(), false, false, 'singleDropdown', false, false);
 $rights = new XMLElement('dct:', 'rights', '', '', '', false, false, 'singleColumn', false, false);
 $businessArea = new XMLElement('dadk:', 'businessArea', '', '', '', false, false, 'singleColumn', false, false);
 $businessAreaCode = new XMLElement('dadk:', 'businessAreaCode', '', '', '', false, false, 'singleColumn', false, false);  
@@ -280,6 +280,47 @@ function getThemeTitle(){
 
     for ($i=0; $i < sizeof($choices); $i++) { 
         $tmp = $xml->xpath('/rdf:RDF/skos:Concept[@rdf:about="http://publications.europa.eu/resource/authority/data-theme/' . $choices[$i] . '"]/dc:identifier');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getFormatValue(){
+    $result = [];
+
+    $choices = array('TAR', 'GZIP', 'ZIP', 'AZW', 'EPUB', 'MOBI', 'GIF', 'JPEG', 'TIFF', 'PNG', 'EPS', 'CSS', 'PDF', 'PDFA1A', 'PDFA1B', 'PDFX', 'METS', 'METS_ZIP', 'PPSX', 'PPS', 'PPT', 'PPTX', 'XLS', 'XLSX', 'XLSXFO', 'XSLT', 'DTD_SGML', 'DTD_XML', 'SCHEMA_XML', 'FMX2', 'FMX3', 'FMX4', 'RDF_XML', 'RDF_TURTLE', 'SGML', 'SKOS_XML', 'OWL', 'XML', 'SPARQLQ', 'SPARQLQRES', 'DOC', 'DOCX', 'ODT', 'TXT', 'RTF', 'HTML', 'XHTML', 'CSV', 'MDB', 'DBF', 'MOP', 'E00', 'MXD', 'KML', 'TSV', 'JSON', 'KMZ', 'GML', 'RSS', 'ODS', 'INDD', 'PSD', 'PS', 'ODF', 'TAR_XZ', 'TAR_GZ', 'RDF', 'XLIFF', 'OVF', 'JSON_LD', 'RDF_N_TRIPLES', 'HDF', 'NETCDF', 'SDMX', 'JPEG2000', 'SHP', 'GDB', 'GMZ', 'ECW', 'GRID_ASCII', 'DMP', 'LAS', 'LAZ', 'TAB', 'TAB_RSTR', 'WORLD', 'TMX', 'ATOM', 'OCTET', 'BIN', 'ODC', 'ODB', 'ODG', 'BMP', 'DCR', 'XYZ', 'MAP_PRVW', 'MAP_SRVC', 'REST', 'MSG_HTTP', 'TIFF_FX', 'PDF1X', 'WARC_GZ', 'RDF_N_QUADS', 'RDF_TRIG', 'RDFA', 'ARC', 'HTML_SIMPL', 'XHTML_SIMPL', 'SQL', 'PDFA2A', 'PDFA2B', 'PDFA3', 'MBOX', 'MPEG2', 'MPEG4', 'MPEG4_AVC', 'BWF', 'MHTML', 'ARC_GZ', 'WARC', 'PDFX1A', 'PDFX2A', 'PDFX4', 'GEOJSON', 'GRID', 'JATS', 'BTIS', 'PWP', 'OP_DATPRO');
+
+    for ($i=0; $i < sizeof($choices); $i++) { 
+        $tmp = 'http://publications.europa.eu/resource/authority/file-type/' . $choices[$i];
+        array_push($result, $tmp);    
+    }
+
+    return $result;
+}
+
+function getFormatDescriptions(){
+    $result = [];
+    $xml = simplexml_load_file('../../filetypes-skos.rdf');
+
+    $attr = array('TAR', 'GZIP', 'ZIP', 'AZW', 'EPUB', 'MOBI', 'GIF', 'JPEG', 'TIFF', 'PNG', 'EPS', 'CSS', 'PDF', 'PDFA1A', 'PDFA1B', 'PDFX', 'METS', 'METS_ZIP', 'PPSX', 'PPS', 'PPT', 'PPTX', 'XLS', 'XLSX', 'XLSXFO', 'XSLT', 'DTD_SGML', 'DTD_XML', 'SCHEMA_XML', 'FMX2', 'FMX3', 'FMX4', 'RDF_XML', 'RDF_TURTLE', 'SGML', 'SKOS_XML', 'OWL', 'XML', 'SPARQLQ', 'SPARQLQRES', 'DOC', 'DOCX', 'ODT', 'TXT', 'RTF', 'HTML', 'XHTML', 'CSV', 'MDB', 'DBF', 'MOP', 'E00', 'MXD', 'KML', 'TSV', 'JSON', 'KMZ', 'GML', 'RSS', 'ODS', 'INDD', 'PSD', 'PS', 'ODF', 'TAR_XZ', 'TAR_GZ', 'RDF', 'XLIFF', 'OVF', 'JSON_LD', 'RDF_N_TRIPLES', 'HDF', 'NETCDF', 'SDMX', 'JPEG2000', 'SHP', 'GDB', 'GMZ', 'ECW', 'GRID_ASCII', 'DMP', 'LAS', 'LAZ', 'TAB', 'TAB_RSTR', 'WORLD', 'TMX', 'ATOM', 'OCTET', 'BIN', 'ODC', 'ODB', 'ODG', 'BMP', 'DCR', 'XYZ', 'MAP_PRVW', 'MAP_SRVC', 'REST', 'MSG_HTTP', 'TIFF_FX', 'PDF1X', 'WARC_GZ', 'RDF_N_QUADS', 'RDF_TRIG', 'RDFA', 'ARC', 'HTML_SIMPL', 'XHTML_SIMPL', 'SQL', 'PDFA2A', 'PDFA2B', 'PDFA3', 'MBOX', 'MPEG2', 'MPEG4', 'MPEG4_AVC', 'BWF', 'MHTML', 'ARC_GZ', 'WARC', 'PDFX1A', 'PDFX2A', 'PDFX4', 'GEOJSON', 'GRID', 'JATS', 'BTIS', 'PWP', 'OP_DATPRO');
+
+    for ($i=0; $i < sizeof($attr); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/skos:Concept[@rdf:about="http://publications.europa.eu/resource/authority/file-type/' . $attr[$i] . '"]/skos:prefLabel[@xml:lang="en"]');
+        $result = array_merge($result, $tmp);   
+    }
+
+    return $result;
+}
+
+function getFormatTitle(){
+    $result = [];
+    $xml = simplexml_load_file('../../filetypes-skos.rdf');
+
+    $choices = array('TAR', 'GZIP', 'ZIP', 'AZW', 'EPUB', 'MOBI', 'GIF', 'JPEG', 'TIFF', 'PNG', 'EPS', 'CSS', 'PDF', 'PDFA1A', 'PDFA1B', 'PDFX', 'METS', 'METS_ZIP', 'PPSX', 'PPS', 'PPT', 'PPTX', 'XLS', 'XLSX', 'XLSXFO', 'XSLT', 'DTD_SGML', 'DTD_XML', 'SCHEMA_XML', 'FMX2', 'FMX3', 'FMX4', 'RDF_XML', 'RDF_TURTLE', 'SGML', 'SKOS_XML', 'OWL', 'XML', 'SPARQLQ', 'SPARQLQRES', 'DOC', 'DOCX', 'ODT', 'TXT', 'RTF', 'HTML', 'XHTML', 'CSV', 'MDB', 'DBF', 'MOP', 'E00', 'MXD', 'KML', 'TSV', 'JSON', 'KMZ', 'GML', 'RSS', 'ODS', 'INDD', 'PSD', 'PS', 'ODF', 'TAR_XZ', 'TAR_GZ', 'RDF', 'XLIFF', 'OVF', 'JSON_LD', 'RDF_N_TRIPLES', 'HDF', 'NETCDF', 'SDMX', 'JPEG2000', 'SHP', 'GDB', 'GMZ', 'ECW', 'GRID_ASCII', 'DMP', 'LAS', 'LAZ', 'TAB', 'TAB_RSTR', 'WORLD', 'TMX', 'ATOM', 'OCTET', 'BIN', 'ODC', 'ODB', 'ODG', 'BMP', 'DCR', 'XYZ', 'MAP_PRVW', 'MAP_SRVC', 'REST', 'MSG_HTTP', 'TIFF_FX', 'PDF1X', 'WARC_GZ', 'RDF_N_QUADS', 'RDF_TRIG', 'RDFA', 'ARC', 'HTML_SIMPL', 'XHTML_SIMPL', 'SQL', 'PDFA2A', 'PDFA2B', 'PDFA3', 'MBOX', 'MPEG2', 'MPEG4', 'MPEG4_AVC', 'BWF', 'MHTML', 'ARC_GZ', 'WARC', 'PDFX1A', 'PDFX2A', 'PDFX4', 'GEOJSON', 'GRID', 'JATS', 'BTIS', 'PWP', 'OP_DATPRO');
+
+    for ($i=0; $i < sizeof($choices); $i++) { 
+        $tmp = $xml->xpath('/rdf:RDF/skos:Concept[@rdf:about="http://publications.europa.eu/resource/authority/file-type/' . $choices[$i] . '"]/dc:identifier');
         $result = array_merge($result, $tmp);   
     }
 
