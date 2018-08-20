@@ -2,7 +2,7 @@
     $data = json_decode($_POST['data'], true);
     global $keyPos;
 
-    //Defines the attribute namespace for each xml node type
+    //Defines the attribute namespace for each xml node type. This is used to determine which attribute type a given element shoudl have
     $attrResource = ["vcard:contactPoint", "adms:page","adms:landingPage", "dct:publisher", "dcat:dataset", 
     "dct:hasVersion", "dct:isVersionOf", "dadk:modelType", "mreg:modellingRegime", "mlev:modellingLevel", "dcat:theme", "dcat:distribution",
     "dcat:accessURL", "cc:license", "dct:format", "dct:type", "rdf:type"];
@@ -49,7 +49,7 @@
     $xmlTmp = '</rdf:Description>' . PHP_EOL . '</rdf:RDF>';
     file_put_contents('../../xml/modelkatalog.rdf.xml',$xmlTmp, FILE_APPEND);
 
-    //Formats the XML file
+    //Formats the XML file and saves the changes.
     $xmlFinal = simplexml_load_file('../../xml/modelkatalog.rdf.xml');
     $dom = new DOMDocument('1.0');
     $dom->preserveWhiteSpace = false;
@@ -59,7 +59,6 @@
     $xmlFinal->saveXML("../../xml/modelkatalog.rdf.xml");
 
     function multiKeyExists(array $arr, $key) {
-
         for ($i=0; $i < sizeof($arr) - 1; $i++) { 
             if(in_array($key, $arr[$i])){
                 $keyPos = $i;

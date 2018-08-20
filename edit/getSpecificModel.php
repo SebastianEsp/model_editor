@@ -1,5 +1,6 @@
 <?php
 
+    //Class modelling the strcutre of an xml element
     class XMLElement {
         public $tagName;
         public $attributeName;
@@ -33,9 +34,9 @@
         }
     }
 
-    //print_r($root);
     $xmlElements = [];
 
+    //Loop trhough each node within the model and instantiate a new xml element with the proper attributes/values.
     foreach ($root->childNodes as $node) {
 
         if(isset($node->tagName) && isset($node->nodeValue) && isset($node->attributes[0]->nodeName) && isset($node->attributes[0]->nodeValue)){
@@ -57,6 +58,7 @@
         }
     }
 
+    //Create a table and fill in the data form the model
     echo '<table class="table table-bordered table-hover table-sm">
             <thead class="thead-dark">
                 <th>Tag Name</th>

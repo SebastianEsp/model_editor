@@ -16,7 +16,7 @@ $(document).click(function(event) {
   }
 });
 
-//Click event handler
+//On lost focus
 $(document).focusout(function(event) {
     //If dropdown menu losses focus, push dropdown menu back behind table.
     if($(event.target).hasClass('dropdown-toggle'))
@@ -25,6 +25,7 @@ $(document).focusout(function(event) {
     }
   });
 
+//Get a specific model based on the provided title.
 function getModelFromTitle(title){
   $.post(
     "getSpecificModel.php",   
@@ -35,7 +36,7 @@ function getModelFromTitle(title){
   );
 }
 
-//Adds a search bar to the dropdown menu, which allows filtering if the menu items
+//Adds a search bar to the dropdown menu, which allows filtering of the menu items
 function dropdownSearch() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("dropdown_search");
@@ -63,13 +64,12 @@ $('textarea').on('keydown', function(e){
 var lastScrollTop = 0
 var scrollPercentage = 10;
 var scroll;
-//Scroll event handler. Dynamically moves the input input box along wiht the scroll bar
+//Scroll event handler. Dynamically moves the input box along with the scroll bar
 $( window ).scroll(function() {
   var scroll = $(window).scrollTop();
   if (scroll > lastScrollTop){
     //If scrolling down
     $(".expanded-input textarea").css("top", scroll);
-    console.log(scrollPercentage);
   } else {
     //If scrolling up
     $(".expanded-input textarea").css("top", scroll);
@@ -78,7 +78,7 @@ $( window ).scroll(function() {
 });
 
 var selectedInput;
-//When input field is focused expand to textarea
+//When input field is focused add overlay and expand to textarea
 function expandInput(sender){
   document.getElementById("overlay").style.display = "block";
   selectedInput = $(sender);
@@ -104,7 +104,7 @@ function bringToFront(){
   $('.header-container').css('z-index', '2');
 }
 
-//Find each value in the table representing the a given model. 
+//Find each value in the table representing a given model. 
 //Split these into chunks of four to represent individual elements within the model
 //Finaly send the JSON representation of the chunks to the save.php script
 function saveChanges(){

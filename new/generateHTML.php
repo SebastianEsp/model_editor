@@ -4,8 +4,11 @@ $genType = $_POST['data'];
 $genNum = $_POST['num'];
 $elements;
 
+//Creates a dropdown menu element. 
+//The dropdown is sectioned into three parts: starting tags defining the dropdown menu, menu-items and closing tags
 function generateDropdown($element){
 
+    
     $dropdown_1 =  '<div class="dropdown dropdown-scroll-new">
                     <a class="btn btn-secondary dropdown-toggle inputField" href="#" name="'. $element->prefix . $element->name .'" role="input" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                
                         Attribute
@@ -14,8 +17,6 @@ function generateDropdown($element){
     
     $dropdown_2 = '';
     for ($i=0; $i < sizeof($element->attribute); $i++) { 
-        //$tmp .= $element.getValue('Model');
-
         $dropdown_2 = $dropdown_2 . '<a class="dropdown-item" title="'. $element->titelLabel[$i]  .'" href="javascript:;" data-foo="'. $element->value[$i]  .'">' . $element->attribute[$i] .'</a>';
     }
     
@@ -27,6 +28,7 @@ function generateDropdown($element){
     return $dropdown_final;
 }
 
+//Generate a form creating either a model or a distribution
 switch($genType){
     case 'ModelForm':
         generateModelForm();
@@ -36,18 +38,21 @@ switch($genType){
         break;
 }
 
+//Generate the first half of the form
 function genFirst($elements){
     for ($i=0; $i < round(sizeof($elements)/2); $i++) { 
         generateElement($elements[$i]);
     }
 }
 
+//Generate the second half of the form
 function genSecond($elements){
     for ($i=round(sizeof($elements)/2); $i < sizeof($elements); $i++) { 
         generateElement($elements[$i]);
     }
 }
 
+//Called when generationg the form for creating a distribution
 function generateDistributionForm(){
 
     include_once 'elementModel.php';
@@ -66,6 +71,7 @@ function generateDistributionForm(){
     }
 }
 
+//Called when generationg the form for creating a model
 function generateModelForm(){
 
     include_once 'elementModel.php';

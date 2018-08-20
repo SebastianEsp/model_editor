@@ -1,13 +1,16 @@
-//Dynamicly add more input fields for input groups with the .entry class
+//On document ready
 $( document ).ready(function() {
 
+  //Disable overlay
   document.getElementById("overlay").style.display = "none";
 
+  //Init the 
   $("#wizard").steps();
 
   var modelGeneratorFirstEntry = $('.modelGeneratorFirst');
   var modelGeneratorSecondEntry = $('.modelGeneratorSecond');
 
+  //Ajax post call to generate the first half of the model form
   $.post(
     "../new/generateHTML.php",
     {data: "ModelForm", num: "first"},
@@ -15,6 +18,7 @@ $( document ).ready(function() {
       modelGeneratorFirstEntry.append(data);
     });
 
+  //Ajax post call to generate the second half of the model form
   $.post(
     "../new/generateHTML.php",
     {data: "ModelForm", num: "second"},
@@ -25,6 +29,7 @@ $( document ).ready(function() {
   var distributionGeneratorFirstEntry = $('.distributionGeneratorFirst');
   var distributionGeneratorSecondEntry = $('.distributionGeneratorSecond');
 
+  //Ajax post call to generate the second half of the form
   $.post(
     "../new/generateHTML.php",
     {data: "DistributionForm", num: "first"},
@@ -32,6 +37,7 @@ $( document ).ready(function() {
       distributionGeneratorFirstEntry.append(data);
     });
 
+  //Ajax post call to generate the first second of the form
   $.post(
     "../new/generateHTML.php",
     {data: "DistributionForm", num: "second"},
@@ -42,7 +48,6 @@ $( document ).ready(function() {
 
 //Click event handler
 $(document).click(function(event) {
-  console.log(event.target);
   if($(event.target).hasClass('dropdown-item')) //If click target is a dropdown item, set the innerhtml, value and data-* attributes of the parent
   {
     $( event.target ).parent().parent().css('z-index', 'auto');
@@ -50,9 +55,17 @@ $(document).click(function(event) {
     $( event.target ).parent().parent().children(':first-child').attr('Value', ($(event.target).text()));
     $( event.target ).parent().parent().children(':first-child').data('foo', ($(event.target).data('foo')));
   }
-  else if($(event.target).hasClass('dropdown-toggle')){
-    console.log('TEST');
+  else if($(event.target).hasClass('dropdown-toggle')){ //If click target is a dropdown menu, push in front of other elements.
     $( event.target ).parent().css('z-index', 10);
+  }
+});
+
+//On lost focus
+$(document).focusout(function(event) {
+  //If dropdown menu losses focus, push dropdown menu back behind table.
+  if($(event.target).hasClass('dropdown-toggle'))
+  {
+      $('.header-container').css('z-index', '0');
   }
 });
 
@@ -67,7 +80,8 @@ $(function()
             currentEntry = $(this).parent('.entry:first'),
             newEntry = $(currentEntry.clone().appendTo(currentEntry.parent()));
 
-        //If button is not the first element define as remove button.
+        //If button is not the first element define as remove button. 
+        //This ensures that the first button within an input group as can add aditional fields, and that all other buttons can remove their respctive field.
         newEntry.find('input').val('');
         currentEntry.parent().find('.entry:not(:first) .btn-add')
             .removeClass('btn-add').addClass('btn-remove')
@@ -115,7 +129,7 @@ $(function()
   });
 });
 
-//Form validation
+//Bootstrap form validation
 (function() {
   'use strict';
   window.addEventListener('load', function() {
@@ -156,12 +170,10 @@ function submitForm(btn){
         })
       }
     }
-    console.log($(this).parent().next());
   });
 
+  //Convert array to json to send to php via ajax
   var json = JSON.stringify(inputs, null, 2)
-
-  console.log(json);
 
   //Ajax post call to the generateXML.php script which appends the values from the form to an xml document.
   $.post(
@@ -172,14 +184,14 @@ function submitForm(btn){
 }; 
 
 var scroll;
-//Scroll event handler. Dynamically moves the input input box along wiht the scroll bar
+//Scroll event handler. Dynamically moves the input box along wiht the scroll bar
 $( window ).scroll(function() {
   scroll = $(this).scrollTop();
   $(".expanded-input textarea").css("top", scroll);
 });
 
 var selectedInput;
-//When input field is focused expand to textarea
+//When an input field is focused add overlay and expand to textarea
 function expandInput(sender){
   document.getElementById("overlay").style.display = "block";
   selectedInput = $(sender);
@@ -191,7 +203,7 @@ function expandInput(sender){
   $(".expanded-input textarea").css("top", scroll);
 }
 
-//When textarea loose focus remove overlay and save changes
+//When textarea loose focus remove overlay and save changes from textarea to input field.
 function lostFocus(sender){
   document.getElementById("overlay").style.display = "none";
   console.log($(sender).val());

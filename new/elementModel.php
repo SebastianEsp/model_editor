@@ -63,6 +63,7 @@ public $dctType;
 }
 
 //Definitions of each possible xml element a model can contain
+//These definitions are used by generateXML.php to determine the appropiate fields for the form, and how to display them
 $title = new XMLElement('dct:', 'title', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow', true, false);
 $preferredNamespacePrefix = new XMLElement('vann:', 'preferredNamespacePrefix', '', '', '', false, true, 'singleColumn', false, false);
 $preferredNamespaceUri = new XMLElement('vann:', 'preferredNamespaceUri', '', '', '', false, true, 'singleColumn', false, false);
@@ -122,6 +123,7 @@ function getValue($choice){
     return $val;
 }
 
+//Defines an array which assoicates a valid choice in a dropdown menu with a corresponding value
 function getTypeValue(){
     $result = [];
 
@@ -135,6 +137,7 @@ function getTypeValue(){
     return $result;
 }
 
+//Defines an array which associates a valid choice in a dropdown menu with a corresponding description
 function getTypeDescriptions(){
     $result = [];
     $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
@@ -149,6 +152,7 @@ function getTypeDescriptions(){
     return $result;
 }
 
+//Defines an array which associates a valid choice in a dropdown menu with a corresponding title
 function getTypeTitle(){
     $result = [];
     $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
