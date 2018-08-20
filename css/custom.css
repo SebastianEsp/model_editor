@@ -73,7 +73,7 @@ input{
 }
 
 .dropdown-scroll-new{
-    min-height:50vh; 
+    min-height:43vh; 
     overflow-y :auto; 
     overflow-x:hidden; 
     position:absolute;
@@ -84,6 +84,10 @@ input{
 .dropdown-item-new{
     width: 250px;
 }
+
+.dropdown-menu-new{
+    width: 250px;
+}      
 
 .dropdown-menu{
     transform: none !important;
