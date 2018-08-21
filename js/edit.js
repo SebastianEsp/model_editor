@@ -48,7 +48,7 @@ $(document).click(function(event) {
       deletedRows.push($(event.target).parent().index() + 1);
 
       var table = document.getElementById("modelTable");
-      var row = table.deleteRow($(event.target).parent().index() + 1);
+      ($(event.target).parent().css('display', 'none'));
     }
   }  
 });

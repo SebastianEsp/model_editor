@@ -20,7 +20,7 @@
         }
     }
 
-    //Keep track of skips made due to comment elements
+    //Keep track of skips made due to comment elements. Used to sync up form row index'es with the position of the respective element in the xml doc 
     $skips = 0;
 
     for ($i=0; $i < $root->childNodes->length + sizeof($newRows); $i++) { 
@@ -65,6 +65,16 @@
         }
     }
 
+    //Save changes to xml doc
     $xml->save('../../xml/modelkatalog.rdf.xml');
+
+    //Format the xml doc
+    $xmlFinal = simplexml_load_file('../../xml/modelkatalog.rdf.xml');
+    $dom = new DOMDocument('1.0');
+    $dom->preserveWhiteSpace = false;
+    $dom->formatOutput = true;
+    $dom->loadXML($xmlFinal->asXML());
+    $xmlFinal = new SimpleXMLElement($dom->saveXML());
+    $xmlFinal->saveXML("../../xml/modelkatalog.rdf.xml");
 
 ?>
