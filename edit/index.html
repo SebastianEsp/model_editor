@@ -7,6 +7,8 @@
         <script src="../js/edit.js"></script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap/bootstrap.js"></script>
+        <script src="../js/jQueryContextMenu/jquery.contextMenu.js"></script>
+        <script src="../js/jQueryContextMenu/jquery.ui.position.js"></script>
         <script src="../icons/fontawesome/svg-with-js/js/fontawesome-all.js"></script> 
 
         <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.css">
@@ -21,16 +23,27 @@
 
     <body>
         <div class="header-container center">
-            <div class="dropdownGenerator center child-small"></div>
             <div class="child-medium">
                 <H1>Edit existing model</H1>
                 <p>Choose an existing model from the dropdown menu to begin editing</p>
             </div>
-            <div class="center child-small left-padding">
+        </div>
+        <div class="header-container center">
+            <div class="center child-small">
+                <div class="dropdownGenerator center"></div>
+            </div>
+            <div class="center child-small">
+                <button type="button" class="btn btn-primary" onclick="addRow();">Add row</button>
+            </div>
+            <div class="center child-small">
+                    <button type="button" class="btn btn-primary" onclick="removeRow(10);">Remove row</button>
+                </div>
+            <div class="center child-small">
                 <button type="button" class="btn btn-primary" onclick="saveChanges();">Save changes</button>
             </div>
         </div>
-            <div class="container">
+
+        <div class="container">
 
             <div class="expanded-input center">
                 <textarea onblur="lostFocus(this);" item-height="200" item-width="300"></textarea>

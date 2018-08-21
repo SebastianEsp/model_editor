@@ -2,6 +2,8 @@
 
     $title = $_POST['data'];
     $chunks = json_decode($_POST['arr'], true);
+    $newRows = json_decode($_POST['new']); 
+    $deletedRows = json_decode($_POST['deleted']); 
 
     $xml = new DOMDocument;
     $xml->strictErrorChecking = FALSE ;
@@ -21,17 +23,10 @@
     //Keep track of skips made due to comment elements
     $skips = 0;
 
-    for ($i=0; $i < $root->childNodes->length; $i++) { 
-        //Checks that a tagname has been set for the node. This makes sure comments are exlucded as they do not have a tagname
+    for ($i=0; $i < $root->childNodes->length + sizeof($newRows); $i++) { 
         
+        //Checks that a tagname has been set for the node. This makes sure comments are exlucded as they do not have a tagname
         if(isset($root->childNodes[$i]->tagName)){
-            //preg_match_all('/(\\S*):(\\S*)/', $chunks[$i][1], $matches, PREG_PATTERN_ORDER);
-            
-            //$replacement = new DOMDocument();
-            //$replacement->strictErrorChecking = FALSE ;
-            //$replacement->loadXml('<'.$chunks[$i][0].'>'.$chunks[$i][3].'</'.$chunks[$i][0].'>');
-
-            //$newNode = $xml->importNode($replacement->documentElement, true);
 
             //Get namespaceUri for the given prefix
             $pfx = $root->childNodes[$i]->prefix;
@@ -43,7 +38,7 @@
             //Separate the preifx and name.
             preg_match_all('/(\\S*):(\\S*)/', $chunks[$i - $skips][1], $matches, PREG_PATTERN_ORDER);
 
-            //If node has an attribute, add attribute field.
+            //If node needs an attribute, add attribute field.
             if(isset($matches[0][0])){
 
                 //Get namespaceUri for the given prefix
@@ -54,9 +49,16 @@
 
                 $replacement->appendChild($attribute); //Append attribute to the replacement element
             }
-            //var_dump("original: " . $root->childNodes[$i]->tagName);
-            //var_dump("new: " .$replacement->tagName);
-            $root->childNodes[$i]->parentNode->replaceChild($replacement, $root->childNodes[$i]); //Replace the old element with the new updated replacement element
+
+            //Replace the old element with the new updated element.
+            if(in_array($i - $skips, $newRows)){ //If element is new
+                $root->childNodes[$i]->parentNode->insertBefore($replacement, $root->childNodes[$i-1]->nextSibling);
+            }else if(in_array($i - $skips + 1, $deletedRows)){//Else if element already exists and needs to be removed
+                $root->childNodes[$i]->parentNode->removeChild($root->childNodes[$i]);
+            }else{//Else if element already exists and needs to be updated
+                $root->childNodes[$i]->parentNode->replaceChild($replacement, $root->childNodes[$i]);
+            }
+
         }else{
             //When a comment node is encountered increment $skips
             $skips +=1;

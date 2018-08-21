@@ -14,6 +14,43 @@ $(document).click(function(event) {
     $( event.target ).parent().parent().children(':first-child').data('foo', ($(event.target).data('foo')));
     $( event.target ).parent().parent().children(':first-child').attr('onclick', 'bringToFront();')
   }
+
+  //If user is in "add row" mode, listen for click on table row
+  if($('html,body').css('cursor') == 'cell' && $(event.target).hasClass('clickable-row')){
+    $('html,body').css('cursor','auto');
+    $("#modelTable :input").prop("disabled", false);
+
+    var table = document.getElementById("modelTable");
+    var row = table.insertRow($(event.target).parent().index() + 2);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+  
+    row.className += 'new-row';
+  
+    cell1.innerHTML = '<td><input onfocus="expandInput(this)" value=""></td>';
+    cell1.className += 'clickable-row';
+    cell2.innerHTML = '<td><input onfocus="expandInput(this)" value=""></td>';
+    cell2.className += 'clickable-row';
+    cell3.innerHTML = '<td><input onfocus="expandInput(this)" value=""></td>';
+    cell3.className += 'clickable-row';
+    cell4.innerHTML = '<td><input onfocus="expandInput(this)" value=""></td>';
+    cell4.className += 'clickable-row';
+  }
+
+  //If user is in "remove row" mode, listen for click on row
+  if($('html,body').css('cursor') == 'url("https://data.gov.dk/test/catalogue/models/modeleditor/icons/remove-icon.cur"), auto' || $('html,body').css('cursor') == "url('../icons/remove-icon.cur')"){
+    if( $(event.target).hasClass('clickable-row')){
+      $('html,body').css('cursor','auto');
+      $("#modelTable :input").prop("disabled", false);
+  
+      deletedRows.push($(event.target).parent().index() + 1);
+
+      var table = document.getElementById("modelTable");
+      var row = table.deleteRow($(event.target).parent().index() + 1);
+    }
+  }  
 });
 
 //On lost focus
@@ -74,7 +111,6 @@ $( window ).scroll(function() {
     //If scrolling up
     $(".expanded-input textarea").css("top", scroll);
   }
-  lastScrollTop = st;
 });
 
 var selectedInput;
@@ -104,6 +140,18 @@ function bringToFront(){
   $('.header-container').css('z-index', '2');
 }
 
+function addRow(){
+  $('html,body').css('cursor','cell');
+  $("#modelTable :input").prop("disabled", true);
+}
+
+var deletedRows = [];
+
+function removeRow(){
+  $('html,body').css('cursor','url(../icons/remove-icon.cur),auto');
+  $("#modelTable :input").prop("disabled", true);
+}
+
 //Find each value in the table representing a given model. 
 //Split these into chunks of four to represent individual elements within the model
 //Finaly send the JSON representation of the chunks to the save.php script
@@ -112,7 +160,7 @@ function saveChanges(){
   var title = $('.dropdown-toggle').attr('value');
   var elements = [];
   var chunks = [];
-  var temparray = [];
+  var temporary = [];
   var chunk = 4;
 
   $('.modeldisplay input').each(function(){
@@ -120,16 +168,30 @@ function saveChanges(){
   });
 
   for (i=0,j=elements.length; i<j; i+=chunk) {
-      temparray = elements.slice(i,i+chunk);
-      var tmp = [temparray[0].attr('value'), temparray[1].attr('value'), temparray[2].attr('value'), temparray[3].attr('value')];
+    temporary = elements.slice(i,i+chunk);
+      var tmp = [temporary[0].attr('value'), temporary[1].attr('value'), temporary[2].attr('value'), temporary[3].attr('value')];
       chunks.push(tmp);
   }
+  var newRows = []; 
 
-  var json = JSON.stringify(chunks, null, 2)
+  //Find all rows in table
+  $('#modelTable tr:not(:first)').each(function()
+  {
+    if($(this).hasClass('new-row')){
+      newRows.push($(this).index());
+    }
+  });
+
+  var json = JSON.stringify(chunks, null, 2)  
+  var jsonRowsNew = JSON.stringify(newRows, null, 2);
+  var jsonRowsDel = JSON.stringify(deletedRows, null, 2);
+
+  console.log(jsonRowsNew);
+  console.log(jsonRowsDel);
 
   $.post(
       "../edit/save.php",   
-      {data: title, arr: json},
+      {data: title, arr: json, new: jsonRowsNew, deleted: jsonRowsDel},
       function(data, status){
         alert(data);
       }

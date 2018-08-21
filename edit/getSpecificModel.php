@@ -56,24 +56,24 @@
     }
 
     //Create a table and fill in the data form the model
-    echo '<table class="table table-bordered table-hover table-sm">
+    echo '<table class="table table-bordered table-hover table-sm" id="modelTable">
             <thead class="thead-dark">
                 <th>Tag Name</th>
                 <th>Atribute Name</th>
                 <th>Atribute Value</th>
                 <th>Value</th>
-            </thead>';
+            </thead>
+            <tbody>';
                 
     foreach ($xmlElements as $elem) {
-        echo '<tbody>
-                <tr>
-                    <td><input onfocus="expandInput(this)" value="'.$elem->tagName.'"></td>
-                    <td><input onfocus="expandInput(this)" value="'.$elem->attributeName.'"></td>
-                    <td><input onfocus="expandInput(this)" value="'.$elem->attributeValue.'"></td>
-                    <td><input onfocus="expandInput(this)" value="'.$elem->value.'"></td>
-                </tr>
-              </tbody>';
+    echo '<tr>
+            <td class="clickable-row"><input onfocus="expandInput(this)" value="'.$elem->tagName.'"></td>
+            <td class="clickable-row"><input onfocus="expandInput(this)" value="'.$elem->attributeName.'"></td>
+            <td class="clickable-row"><input onfocus="expandInput(this)" value="'.$elem->attributeValue.'"></td>
+            <td class="clickable-row"><input onfocus="expandInput(this)" value="'.$elem->value.'"></td>
+          </tr>';
     }        
     
-    echo '</table>';
+    echo '</tbody>
+          </table>';
 ?>

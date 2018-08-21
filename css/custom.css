@@ -59,7 +59,7 @@ input{
 
 .center{
     margin: auto;
-    width: 50%;
+    width: 75%;
     text-align: center;
 }
 
@@ -115,6 +115,8 @@ input{
 
 .child-small {
     margin: auto;
+    margin-top: 0px;
+    margin-bottom: 10px;
     flex-grow: 1;
   }
 
@@ -125,7 +127,9 @@ input{
 
 .child-large {
     margin: auto;
-    flex: 1 0 0;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 0;
 }
 
 .expanded-input{
