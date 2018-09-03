@@ -58,6 +58,9 @@ $(document).click(function(event) {
   else if($(event.target).hasClass('dropdown-toggle')){ //If click target is a dropdown menu, push in front of other elements.
     $( event.target ).parent().css('z-index', 10);
   }
+  else if($(event.target).attr('href') == '#next'){
+    distLink();
+  }
 });
 
 //On lost focus
@@ -179,7 +182,11 @@ function submitForm(btn){
   $.post(
     "generateXML.php",   
     {data: json},
-    function(data, status){alert("Data: " + data + "\nStatus: " + status)}
+    function(data, status){
+      if(status == 'success'){
+        alert('The model was added successfully')
+      }
+    }
   );
 }; 
 
@@ -212,4 +219,16 @@ function lostFocus(sender){
   selectedInput.text($(sender).val());
   sender.value = '';
   $('.expanded-input').css('visibility', 'hidden');
+}
+
+//Links the value from the distribution field to the accessURL field
+function distLink(){
+  if($('#distribution_input').val() != ''){
+    $('#accessURL_attribute_input').val($('#distribution_input').val());
+  }
+}
+
+function viewOutput(){
+  var win = window.open('https://data.gov.dk/test/catalogue/models/xml/modelkatalog.rdf.xml#FOAF', '_blank');
+  win.focus();
 }
