@@ -67,7 +67,7 @@ input{
     overflow-y :auto; 
     overflow-x:hidden; 
     position:absolute;
-    width:300px;
+    max-width:150px;
     display: content;
 }
 
@@ -78,6 +78,10 @@ input{
     position:absolute;
     width: 250px;
     display: content;
+}
+
+.dropdown-toggle{
+    max-width: inherit;
 }
 
 .dropdown-item-new{
@@ -160,9 +164,13 @@ textarea{
 }
 
 .right-padding{
-    padding-right: 200px;
+    padding-right: 250px;
 }
 
 .left-padding{
     padding-left: 100px;
+}
+
+.chosen-model{
+    margin-bottom: 10px;
 }

@@ -12,7 +12,12 @@ $(document).click(function(event) {
     $( event.target ).parent().parent().children(':first-child').text($(event.target).text());
     $( event.target ).parent().parent().children(':first-child').attr('Value', ($(event.target).text()));
     $( event.target ).parent().parent().children(':first-child').data('foo', ($(event.target).data('foo')));
-    $( event.target ).parent().parent().children(':first-child').attr('onclick', 'bringToFront();')
+    $( event.target ).parent().parent().children(':first-child').attr('onclick', 'bringToFront();');
+    $( event.target ).parent().parent().children(':first-child').css('max-width', '150px');
+    $( event.target ).parent().parent().children(':first-child').parent().css('padding-right', '0px');
+    $('.chosen-model').text($(event.target).text());
+    $('.dropdown-scroll').css('max-width', '150px');
+    $('.dropdown-scroll').css('padding-right', '0px');
   }
 
   //If user is in "add row" mode, listen for click on table row
@@ -138,6 +143,8 @@ function lostFocus(sender){
 //Brings the dropdown menu to the front of the table.
 function bringToFront(){
   $('.header-container').css('z-index', '2');
+  $('.dropdown-scroll').css('max-width', '1000px');
+  $('.dropdown-scroll').css('padding-right', '250px');
 }
 
 function addRow(){

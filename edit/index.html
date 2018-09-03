@@ -30,7 +30,10 @@
         </div>
         <div class="header-container center">
             <div class="center child-small">
-                <div class="dropdownGenerator center"></div>
+                <div class="dropdown-model center"></div>
+            </div>
+            <div class="center child-small">
+                <div class="dropdown-dist center"></div>
             </div>
             <div class="center child-small">
                 <button type="button" class="btn btn-primary" onclick="addRow();">Add row</button>
@@ -42,6 +45,8 @@
                 <button type="button" class="btn btn-primary" onclick="saveChanges();">Save changes</button>
             </div>
         </div>
+
+        <h3 class="center chosen-model"></h3>
 
         <div class="container">
 
@@ -59,8 +64,18 @@
             (function() {
                 $.post(
                     "getModels.php",
+                    {type: "model"},
                     function(data, status){
-                        $('.dropdownGenerator').append(data);
+                        $('.dropdown-model').append(data);
+                    });
+            })();
+
+            (function() {
+                $.post(
+                    "getModels.php",
+                    {type: "dist"},
+                    function(data, status){
+                        $('.dropdown-dist').append(data);
                     });
             })();
         </script>
