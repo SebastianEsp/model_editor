@@ -28,21 +28,26 @@
         //Checks that a tagname has been set for the node. This makes sure comments are exlucded as they do not have a tagname
         if(isset($root->childNodes[$i]->tagName)){
 
-            //Get namespaceUri for the given prefix
-            $pfx = $root->childNodes[$i]->prefix;
+            //Separate the preifx and name of the element.
+            preg_match_all('/(\\S*):(\\S*)/', $chunks[$i - $skips][0], $matches_root, PREG_PATTERN_ORDER);
 
+            //Prefix of the element
+            $pfx = $matches_root[1][0];
+            
+            //Get namespaceUri for the given prefix
             $uri = $xml->documentElement->lookupnamespaceURI($pfx);
 
             $replacement = $xml->createElementNS($uri, $chunks[$i - $skips][0], $chunks[$i - $skips][3]); //Create new node and update prefix, name and value
 
-            //Separate the preifx and name.
-            preg_match_all('/(\\S*):(\\S*)/', $chunks[$i - $skips][1], $matches, PREG_PATTERN_ORDER);
+
+            //Separate the preifx and name of an attribute.
+            preg_match_all('/(\\S*):(\\S*)/', $chunks[$i - $skips][1], $matches_attr, PREG_PATTERN_ORDER);
 
             //If node needs an attribute, add attribute field.
-            if(isset($matches[0][0])){
+            if(isset($matches_attr[0][0])){
 
                 //Get namespaceUri for the given prefix
-                $uri = $xml->documentElement->lookupnamespaceURI($matches[1][0]);
+                $uri = $xml->documentElement->lookupnamespaceURI($matches_attr[1][0]);
 
                 $attribute = $xml->createAttributeNS($uri, $chunks[$i - $skips][1]); //Create the new attribute field
                 $attribute->value = $chunks[$i - $skips][2]; //Add value to the attribute
@@ -51,7 +56,7 @@
             }
 
             //Replace the old element with the new updated element.
-            if(in_array($i - $skips, $newRows)){ //If element is new
+            if(in_array($i - $skips + sizeof($newRows), $newRows)){ //If element is new insert element below
                 $root->childNodes[$i]->parentNode->insertBefore($replacement, $root->childNodes[$i-1]->nextSibling);
             }else if(in_array($i - $skips + 1, $deletedRows)){//Else if element already exists and needs to be removed
                 $root->childNodes[$i]->parentNode->removeChild($root->childNodes[$i]);

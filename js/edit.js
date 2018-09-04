@@ -1,7 +1,15 @@
 //Dynamicly add more input fields for input groups with the .entry class
 $( document ).ready(function() {
 
-  document.getElementById("overlay").style.display = "none";
+  document.getElementById("overlay").style.display = "none"
+
+  //Only run refrash function if page is reloaded
+  var reloading = sessionStorage.getItem("reloading");
+  if (reloading) {
+      sessionStorage.removeItem("reloading");
+      $('.chosen-model').text(sessionStorage.getItem("model"));
+      refresh();
+  }
 
 });
 
@@ -9,22 +17,34 @@ $( document ).ready(function() {
 $(document).click(function(event) {
   if($(event.target).hasClass('dropdown-item')) //If click target is a dropdown item, set the innerhtml, value and data-* attributes of the parent
   {
+    //Update dropdown text to reflect the currently selected model.
     $( event.target ).parent().parent().children(':first-child').text($(event.target).text());
     $( event.target ).parent().parent().children(':first-child').attr('Value', ($(event.target).text()));
     $( event.target ).parent().parent().children(':first-child').data('foo', ($(event.target).data('foo')));
+
+    //Bring to dropdown menu to the front of model view.
     $( event.target ).parent().parent().children(':first-child').attr('onclick', 'bringToFront();');
     $( event.target ).parent().parent().children(':first-child').css('max-width', '150px');
     $( event.target ).parent().parent().children(':first-child').parent().css('padding-right', '0px');
+
+    //Update title to show the currently selected model.
     $('.chosen-model').text($(event.target).text());
+
+    //Reset dropdown width and padding when dropdown menu is closed
     $('.dropdown-scroll').css('max-width', '150px');
     $('.dropdown-scroll').css('padding-right', '0px');
   }
 
   //If user is in "add row" mode, listen for click on table row
   if($('html,body').css('cursor') == 'cell' && $(event.target).hasClass('clickable-row')){
+    
+    //Change curser back to default.
     $('html,body').css('cursor','auto');
+
+    //Re-enable all input fields
     $("#modelTable :input").prop("disabled", false);
 
+    //Incert four new cells in the row below the clicked row.
     var table = document.getElementById("modelTable");
     var row = table.insertRow($(event.target).parent().index() + 2);
     var cell1 = row.insertCell(0);
@@ -34,6 +54,7 @@ $(document).click(function(event) {
   
     row.className += 'new-row';
   
+    //Add required html to the new cells.
     cell1.innerHTML = '<td><input onfocus="expandInput(this)" value=""></td>';
     cell1.className += 'clickable-row';
     cell2.innerHTML = '<td><input onfocus="expandInput(this)" value=""></td>';
@@ -47,11 +68,17 @@ $(document).click(function(event) {
   //If user is in "remove row" mode, listen for click on row
   if($('html,body').css('cursor') == 'url("https://data.gov.dk/test/catalogue/models/modeleditor/icons/remove-icon.cur"), auto' || $('html,body').css('cursor') == "url('../icons/remove-icon.cur')"){
     if( $(event.target).hasClass('clickable-row')){
+
+      //Change curser back to default
       $('html,body').css('cursor','auto');
+
+      //Re-enable all input fields
       $("#modelTable :input").prop("disabled", false);
   
+      //Add the chosen row to an array for later removal.
       deletedRows.push($(event.target).parent().index() + 1);
 
+      //Hide the chosen row. It will be removed later.
       var table = document.getElementById("modelTable");
       ($(event.target).parent().css('display', 'none'));
     }
@@ -148,14 +175,20 @@ function bringToFront(){
 }
 
 function addRow(){
+  //Change curser to reflect that user is in "add row" mode.
   $('html,body').css('cursor','cell');
+
+  //Disable all input fields while in "add row" mode.
   $("#modelTable :input").prop("disabled", true);
 }
 
 var deletedRows = [];
 
 function removeRow(){
+  //Change curser to reflect that user is in "remove row" mode.
   $('html,body').css('cursor','url(../icons/remove-icon.cur),auto');
+
+  //Disable all input fields while in "remove row" mode.
   $("#modelTable :input").prop("disabled", true);
 }
 
@@ -164,24 +197,28 @@ function removeRow(){
 //Finaly send the JSON representation of the chunks to the save.php script
 function saveChanges(){
 
-  var title = $('.dropdown-toggle').attr('value');
+  var title = $('.chosen-model').text();
   var elements = [];
   var chunks = [];
   var temporary = [];
   var chunk = 4;
 
+  //For each input field, add to elements array
   $('.modeldisplay input').each(function(){
       elements.push($(this));
   });
 
+  //Slice elements array into chunks of four
   for (i=0,j=elements.length; i<j; i+=chunk) {
     temporary = elements.slice(i,i+chunk);
       var tmp = [temporary[0].attr('value'), temporary[1].attr('value'), temporary[2].attr('value'), temporary[3].attr('value')];
       chunks.push(tmp);
   }
+
   var newRows = []; 
 
-  //Find all rows in table
+  //Find all rows in table except for the first row.
+  //If row has class "new row" it has been added by the user and is pushed to newRows array.
   $('#modelTable tr:not(:first)').each(function()
   {
     if($(this).hasClass('new-row')){
@@ -189,19 +226,31 @@ function saveChanges(){
     }
   });
 
+  //Convert arrays to json to allow for sending through to php
   var json = JSON.stringify(chunks, null, 2)  
   var jsonRowsNew = JSON.stringify(newRows, null, 2);
   var jsonRowsDel = JSON.stringify(deletedRows, null, 2);
-
-  console.log(jsonRowsNew);
-  console.log(jsonRowsDel);
 
   $.post(
       "../edit/save.php",   
       {data: title, arr: json, new: jsonRowsNew, deleted: jsonRowsDel},
       function(data, status){
-        alert(data);
+        alert(data + status);
+        sessionStorage.setItem("reloading", "true");
+        sessionStorage.setItem("model", $('.chosen-model').text());
+        document.location.reload();
       }
     );
+}
+
+//Refresh page with specific model loaded
+function refresh(){
+  
+  //Get the currently selected model from session storage.
+  var currentModel = sessionStorage.getItem("model");
+  sessionStorage.removeItem("model");
+
+  //Display the newly updated model
+  getModelFromTitle(currentModel);
 }
   
