@@ -7,8 +7,6 @@
         <script src="../js/edit.js"></script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap/bootstrap.js"></script>
-        <script src="../js/jQueryContextMenu/jquery.contextMenu.js"></script>
-        <script src="../js/jQueryContextMenu/jquery.ui.position.js"></script>
         <script src="../icons/fontawesome/svg-with-js/js/fontawesome-all.js"></script> 
 
         <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.css">
@@ -18,7 +16,7 @@
         <link rel="stylesheet" type="text/css" href="../css/jqueryUI/steps.css">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta charset="UTF-8"> 
-        <title>Edit existing model</title>
+        <title>Editasdasd existing model</title>
     </head>
 
     <body>
@@ -51,7 +49,8 @@
         <div class="container">
 
             <div class="expanded-input center">
-                <textarea onblur="lostFocus(this);" item-height="200" item-width="300"></textarea>
+                <textarea id="textarea" onblur="lostFocus(this);" item-height="200" item-width="300" autofocus></textarea>
+                <input type="button" id="focusButton" onclick="focusit()" value="give element focus">
             </div>  
             <div id="overlay"></div>
 

@@ -94,6 +94,13 @@ $(document).focusout(function(event) {
     }
   });
 
+//Event handler for key press
+$(document).on('keydown', function(event) {
+  if(event.keyCode == 27 && document.getElementById("overlay").style.display == "block"){
+    lostFocus($('.expanded-input'));
+  }
+});
+
 //Get a specific model based on the provided title.
 function getModelFromTitle(title){
   $.post(
@@ -145,26 +152,47 @@ $( window ).scroll(function() {
   }
 });
 
+function focusit(){
+	$('#textarea').focus();
+}
+
 var selectedInput;
 //When input field is focused add overlay and expand to textarea
 function expandInput(sender){
-  document.getElementById("overlay").style.display = "block";
+  window.setTimeout( focusit, 0); //If focus event is used without the delay, it will not take effect. SetTimeout even wiht 0 time somwhow force the focus through 
+  document.getElementById('overlay').style.display = 'block';
   selectedInput = $(sender);
   var selectedVal = sender.value;
   $(selectedInput).prop('disabled', true);
+  $(selectedInput).blur();
   $('.expanded-input textarea').val(selectedVal);
   $('.expanded-input').css('visibility', 'visible');
-  $(".expanded-input textarea").css("margin-top", '0%');
-  $(".expanded-input textarea").css("top", scroll);
+  $('.expanded-input textarea').css('margin-top', '0%');
+  $('.expanded-input textarea').css('top', scroll);
 }
 
 //When textarea loose focus remove overlay and save changes
 function lostFocus(sender){
-  document.getElementById("overlay").style.display = "none";
-  $(selectedInput).prop('disabled', false);
-  selectedInput.attr('value', $(sender).val());
-  sender.value = '';
-  $('.expanded-input').css('visibility', 'hidden');
+  var isFirefox = typeof InstallTrigger !== 'undefined';
+  if(isFirefox){ //Firefox handles things differently which means the selected input must be focused before the new value is displayed.
+                 //as such we focus the selectedInput field and then remove the focus again afterwards.
+                 //Be mindfull that the way to detect Firefox as the browser may change in the future as the browser is updated.
+    $(selectedInput).prop('disabled', false);
+    selectedInput.attr('value', $(sender).val());
+    sender.value = '';
+    $(selectedInput).focus();
+    document.getElementById("overlay").style.display = "none";
+    $('.expanded-input').css('visibility', 'hidden');
+    $(selectedInput).prop('disabled', false);
+    $(selectedInput).blur();
+  }else{
+    $(selectedInput).prop('disabled', false);
+    selectedInput.attr('value', $(sender).val());
+    sender.value = '';
+    document.getElementById("overlay").style.display = "none";
+    $('.expanded-input').css('visibility', 'hidden');
+    $(selectedInput).prop('disabled', false);
+  }
 }
 
 //Brings the dropdown menu to the front of the table.
@@ -253,4 +281,3 @@ function refresh(){
   //Display the newly updated model
   getModelFromTitle(currentModel);
 }
-  
