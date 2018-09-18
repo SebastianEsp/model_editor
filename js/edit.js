@@ -102,7 +102,7 @@ $(document).on('keydown', function(event) {
 });
 
 //Get a specific model based on the provided title.
-function getModelFromTitle(title){
+function getModelFromTitle(title){  
   $.post(
     "getSpecificModel.php",   
     {data: title},

@@ -228,7 +228,9 @@ function distLink(){
   }
 }
 
+//Link to the new model in the xml doc
 function viewOutput(){
-  var win = window.open('https://data.gov.dk/test/catalogue/models/xml/modelkatalog.rdf.xml#FOAF', '_blank');
+  
+  var win = window.open('https://data.gov.dk/test/catalogue/models/xml/modelkatalog.rdf.xml#' + $('#title_value_input:first').val(), '_blank');
   win.focus();
 }
