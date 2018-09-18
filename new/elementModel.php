@@ -47,206 +47,467 @@ public $rdfType;
 public $dctType;
 
 
-    //Defines the properties of a valid xml element
+    //Defines the possible properties of a field in the form
     public function __construct($Prefix, $Name, $Attribute, $Value, $TitelLabel, $HasMultiplicity, $IsRequired, $Columns, $ReadOnly, $Hidden) {
         $this->prefix = $Prefix; //Defines xml prefix
         $this->name = $Name; //Defines element name
         $this->attribute = $Attribute; //Use whenever an xml-element always has a specific xml-attribute
-        $this->value = $Value; //Used to define custom data-* attributes. Precently used to give a field a datepicker.
+        $this->value = $Value; //Defines the html value property.
         $this->titelLabel = $TitelLabel; //Use to define the title attribute when generating an HTML-element
         $this->hasMultiplicity = $HasMultiplicity; //Defines if the editor should allow for multiple fields of the same element
         $this->isRequired = $IsRequired; //Defines whether or not the element must contain a value or attribute
         $this->columns = $Columns; //Defines the type of HTML-element the editor must create for the xml-element 
         $this->readOnly = $ReadOnly; //Defines whether or not a field in the editor can be edited
-        $this->hidden = $Hidden; //Defines whether or not a field is visible
+        $this->hidden = $Hidden; //Defines whether or not a field is visible. Used to hide fields that needs to be set, but not shown.
     }
 }
 
 //Definitions of each possible xml element a model can contain
-//These definitions are used by generateXML.php to determine the appropiate fields for the form, and how to display them
-$title = new XMLElement('dct:', 'title', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow', true, false);
-$preferredNamespacePrefix = new XMLElement('vann:', 'preferredNamespacePrefix', '', '', '', false, true, 'singleColumn', false, false);
-$preferredNamespaceUri = new XMLElement('vann:', 'preferredNamespaceUri', '', '', '', false, true, 'singleColumn', false, false);
-$altLabel = new XMLElement('skos:', 'altLabel', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
-$description = new XMLElement('dct:', 'description', array('xml:lang="da"','xml:lang="en"'), '', '', false, true, 'doubleRow', true, false);
-$keyword = new XMLElement('dcat:', 'keyword', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
-$versionNotes = new XMLElement('adms:', 'versionNotes', array('xml:lang="da"','xml:lang="en"'), '', '', true, false, 'buttonDoubleRow', true, false);
-$versionInfo = new XMLElement('owl:', 'versionInfo', 'http://www.w3.org/2001/XMLSchema#decimal', '', '', true, false, 'doubleColumn', true, true);
-$identifier = new XMLElement('dct:', 'identifier', '', '', '', true, false, 'buttonDouble', false, false);
-$issued = new XMLElement('dct:', 'issued', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
-$modified = new XMLElement('dct:', 'modified', 'http://www.w3.org/2001/XMLSchema#date', 'date', '', false, false, 'doubleColumn', true, true);
-$contactPoint = new XMLElement('vcard:', 'contactPoint', '', '', '', false, false, 'doubleColumn', false, false);    
-$page = new XMLElement('adms:', 'page', '', '', '', true, false, 'buttonSingle', false, false);    
-$landingPage = new XMLElement('adms:', 'landingPage', '', '', '', false, false, 'singleColumn', false, false);    
-$publisher = new XMLElement('dct:', 'publisher', '', '', '', true, true, 'buttonSingle', false, false);   
-$dataset = new XMLElement('dcat:', 'dataset', '', '', '', true, false, 'buttonDouble', false, false);   
-$hasVersion = new XMLElement('dct:', 'hasVersion', '', '', '', true, false, 'buttonSingle', false, false);   
-$isVersionOf = new XMLElement('dct:', 'isVersionOf', '', '', '', false, false, 'singleColumn', false, false);   
-$modelType = new XMLElement('dadk:', 'modelType', getTypeTitle(), getTypeValue(), getTypeDescriptions(), false, true, 'singleDropdown', false, false); 
-$modellingRegime = new XMLElement('mreg:', 'modellingRegime', getRegimeTitle(), getRegimeValue(), getRegimeDescriptions(), false, true, 'singleDropdown', false, false); 
-$modellingLevel = new XMLElement('mlev:', 'modellingLevel', getLevelTitle(), getLevelValue(), getLevelDescriptions(), false, true, 'singleDropdown', false, false); 
-$theme = new XMLElement('dcat:', 'theme', getThemeTitle(), getThemeValue(), getThemeDescriptions(), false, false, 'singleDropdown', false, false); 
-$distribution = new XMLElement('dcat:', 'distribution', '', '', '', true, false, 'buttonSingle', false, false); 
-$fileSize = new XMLElement('schema:', 'fileSize', 'http://www.w3.org/2001/XMLSchema#string', '', '', false, false, 'doubleColumn', false, true);
-$accessURL = new XMLElement('dcat:', 'accessURL', '', '', '', true, true, 'singleColumn', false, false);
-$license = new XMLElement('cc:', 'license', '', '', '', true, false, 'singleColumn', false, false);  
-$format = new XMLElement('dct:', 'format', getFormatTitle(), getFormatValue(), getFormatDescriptions(), false, false, 'singleDropdown', false, false);
-$rights = new XMLElement('dct:', 'rights', '', '', '', false, false, 'singleColumn', false, false);
-$businessArea = new XMLElement('dadk:', 'businessArea', '', '', '', false, false, 'singleColumn', false, false);
-$businessAreaCode = new XMLElement('dadk:', 'businessAreaCode', '', '', '', false, false, 'singleColumn', false, false);  
-$dctType = new XMLElement('dct:', 'type', 'http://data.europa.eu/dr8/CoreDataModel', '', '', false, false, 'typeColumn', true, false);  
-$rdfType = new XMLElement('rdf:', 'type', array('http://www.w3.org/ns/dcat#Dataset', 'http://www.w3.org/ns/dcat#Distribution'), '', '', false, false, 'typeColumn', true, false);  
+//These definitions are used by generateHTML to determine the properties of each input field. 
 
-function getValue($choice){
+$title = new XMLElement('dct:', //xml prefix
+                        'title', //Element name
+                        array('xml:lang="da"','xml:lang="en"'), //xml-attribute
+                        '', //HTML value
+                        '', //HTML title
+                        false, //HasMultiplicity
+                        true, //IsRequired
+                        'doubleRow', //Element type
+                        true, //ReadOnly
+                        false); //Hidden
+
+$preferredNamespacePrefix = new XMLElement('vann:', //xml prefix
+                                           'preferredNamespacePrefix', //Element name
+                                           '', //xml-attribute
+                                           '', //HTML value
+                                           '', //HTML title
+                                           false, //HasMultiplicity
+                                           true, //IsRequired
+                                           'singleColumn', //Element type
+                                           false, //ReadOnly
+                                           false); //Hidden
+
+
+$preferredNamespaceUri = new XMLElement('vann:', //xml prefix 
+                                        'preferredNamespaceUri', //Element name
+                                        '', //xml-attribute
+                                        '', //HTML value
+                                        '', //HTML title
+                                        false, //HasMultiplicity
+                                        true, //IsRequired
+                                        'singleColumn', //Element type
+                                        false, //ReadOnly
+                                        false); //Hidden
+
+
+$altLabel = new XMLElement('skos:', //xml prefix 
+                           'altLabel', //Element name
+                           array('xml:lang="da"','xml:lang="en"'), //xml-attribute
+                           '', //HTML value
+                           '', //HTML title
+                           true, //HasMultiplicity
+                           false, //IsRequired
+                           'buttonDoubleRow', //Element type
+                           true, //ReadOnly
+                           false); //Hidden
+
+
+$description = new XMLElement('dct:', //xml prefix 
+                              'description', //Element name
+                              array('xml:lang="da"','xml:lang="en"'), //xml-attribute
+                              '', //HTML value
+                              '', //HTML title
+                              false, //HasMultiplicity
+                              true, //IsRequired
+                              'doubleRow', //Element type
+                              true, //ReadOnly
+                              false); //Hidden
+
+
+$keyword = new XMLElement('dcat:', //xml prefix 
+                          'keyword', //Element name
+                          array('xml:lang="da"','xml:lang="en"'), //xml-attribute 
+                          '', //HTML value
+                          '', //HTML title
+                          true, //HasMultiplicity
+                          false, //IsRequired
+                          'buttonDoubleRow', //Element type
+                          true, //ReadOnly
+                          false); //Hidden
+
+
+$versionNotes = new XMLElement('adms:', //xml prefix
+                               'versionNotes', //Element name
+                               array('xml:lang="da"','xml:lang="en"'), //xml-attribute 
+                                '', //HTML value
+                                '', //HTML title
+                                true, //HasMultiplicity
+                                false, //IsRequired
+                                'buttonDoubleRow', //Element type
+                                true, //ReadOnly
+                                false); //Hidden
+
+
+$versionInfo = new XMLElement('owl:', //xml prefix
+                              'versionInfo', //Element name
+                              'http://www.w3.org/2001/XMLSchema#decimal', //xml-attribute 
+                              '', //HTML value
+                              '', //HTML title
+                              true, //HasMultiplicity
+                              false, //IsRequired
+                              'doubleColumn', //Element type
+                              true, //ReadOnly
+                              true); //Hidden
+
+
+$identifier = new XMLElement('dct:', //xml prefix
+                             'identifier', //Element name
+                             '', //xml-attribute 
+                             '', //HTML value
+                             '', //HTML title
+                             true, //HasMultiplicity
+                             false, //IsRequired
+                             'buttonDouble', //Element type
+                             false, //ReadOnly
+                             false); //Hidden
+
+
+$issued = new XMLElement('dct:', //xml prefix
+                         'issued', //Element name
+                         'http://www.w3.org/2001/XMLSchema#date', //xml-attribute
+                         'date', //HTML value
+                         '', //HTML title
+                         false, //HasMultiplicity
+                         false, //IsRequired
+                         'doubleColumn', //Element type
+                         true, //ReadOnly
+                         true); //Hidden
+
+
+$modified = new XMLElement('dct:', //xml prefix
+                           'modified', //Element name
+                           'http://www.w3.org/2001/XMLSchema#date', //xml-attribute
+                           'date', //HTML value
+                           '', //HTML title
+                           false, //HasMultiplicity
+                           false, //IsRequired
+                           'doubleColumn', //Element type
+                           true, //ReadOnly
+                           true); //Hidden
+
+
+$contactPoint = new XMLElement('vcard:', //xml prefix
+                               'contactPoint', //Element name
+                               '', //xml-attribute
+                               '', //HTML value
+                               '', //HTML title
+                               false, //HasMultiplicity
+                               false, //IsRequired
+                               'doubleColumn', //Element type
+                               false, //ReadOnly
+                               false); //Hidden 
+
+
+$page = new XMLElement('adms:', //xml prefix
+                       'page', //Element name
+                       '', //xml-attribute
+                       '', //HTML value
+                       '', //HTML title
+                       true, //HasMultiplicity
+                       false, //IsRequired
+                       'buttonSingle', //Element type
+                       false, //ReadOnly
+                       false); //Hidden     
+
+
+$landingPage = new XMLElement('adms:', //xml prefix 
+                              'landingPage', //Element name
+                              '', //xml-attribute
+                              '', //HTML value
+                              '', //HTML title
+                              false, //HasMultiplicity
+                              false, //IsRequired
+                              'singleColumn', //Element type
+                              false, //ReadOnly
+                              false); //Hidden 
+
+
+$publisher = new XMLElement('dct:', //xml prefix 
+                            'publisher', //Element name
+                            '', //xml-attribute
+                            '', //HTML value
+                            '', //HTML title
+                            true, //HasMultiplicity
+                            true, //IsRequired
+                            'buttonSingle', //Element type
+                            false, //ReadOnly
+                            false); //Hidden
+
+
+$dataset = new XMLElement('dcat:', //xml prefix 
+                          'dataset', //Element name
+                          '', //xml-attribute
+                          '', //HTML value
+                          '', //HTML title
+                          true, //HasMultiplicity
+                          false, //IsRequired
+                          'buttonDouble', //Element type
+                          false, //ReadOnly
+                          false); //Hidden
+
+
+$hasVersion = new XMLElement('dct:', //xml prefix 
+                             'hasVersion', //Element name
+                             '', //xml-attribute
+                             '', //HTML value
+                             '', //HTML title
+                             true, //HasMultiplicity
+                             false, //IsRequired
+                             'buttonSingle', //Element type
+                             false, //ReadOnly
+                             false); //Hidden
+
+
+$isVersionOf = new XMLElement('dct:', //xml prefix 
+                              'isVersionOf', //Element name
+                              '', //xml-attribute
+                              '', //HTML value 
+                              '', //HTML title
+                              false, //HasMultiplicity
+                              false, //IsRequired
+                              'singleColumn', //Element type
+                              false, //ReadOnly
+                              false); //Hidden
+
+
+$modelType = new XMLElement('dadk:', //xml prefix 
+                            'modelType', //Element name
+                            getTitle('../../../../model/core/modeltype.rdf', 'https://data.gov.dk/model/core/modeltype#'), //xml-attribute
+                            getValue('../../../../model/core/modeltype.rdf', 'https://data.gov.dk/model/core/modeltype#'), //HTML value 
+                            getDescription('../../../../model/core/modeltype.rdf', 'https://data.gov.dk/model/core/modeltype#'), //HTML title
+                            false, //HasMultiplicity
+                            true, //IsRequired
+                            'singleDropdown', //Element type
+                            false, //ReadOnly
+                            false); //Hidden
+
+
+$modellingRegime = new XMLElement('mreg:', //xml prefix 
+                                  'modellingRegime', //Element name
+                                  getTitle('../../../../model/core/modellingregime.rdf', 'https://data.gov.dk/model/core/modellingregime#'), //xml-attribute
+                                  getValue('../../../../model/core/modellingregime.rdf', 'https://data.gov.dk/model/core/modellingregime#'), //HTML value 
+                                  getDescription('../../../../model/core/modellingregime.rdf', 'https://data.gov.dk/model/core/modellingregime#'), //HTML title
+                                  false, //HasMultiplicity
+                                  true, //IsRequired
+                                  'singleDropdown', //Element type
+                                  false, //ReadOnly
+                                  false); //Hidden
+
+
+$modellingLevel = new XMLElement('mlev:', //xml prefix
+                                 'modellingLevel', //Element name
+                                 getTitle('../../../../model/core/modellinglevel.rdf', 'https://data.gov.dk/model/core/modellinglevel#'), //xml-attribute
+                                 getValue('../../../../model/core/modellinglevel.rdf', 'https://data.gov.dk/model/core/modellinglevel#'), //HTML value
+                                 getDescription('../../../../model/core/modellinglevel.rdf', 'https://data.gov.dk/model/core/modellinglevel#'), //HTML title
+                                 false, //HasMultiplicity
+                                 true, //IsRequired
+                                 'singleDropdown', //Element type
+                                 false, //ReadOnly
+                                 false); //Hidden
+
+
+$theme = new XMLElement('dcat:', //xml prefix
+                        'theme', //Element name
+                        getThemeTitle(), //xml-attribute
+                        getThemeValue(), //HTML value
+                        getThemeDescriptions(), //HTML title
+                        false, //HasMultiplicity
+                        false, //IsRequired
+                        'singleDropdown', //Element type
+                        false, //ReadOnly 
+                        false); //Hidden
+
+
+$distribution = new XMLElement('dcat:', //xml prefix 
+                               'distribution', //Element name
+                               '', //xml-attribute
+                               '', //HTML value
+                               '', //HTML title
+                               true, //HasMultiplicity
+                               false, //IsRequired
+                               'buttonSingle', //Element type
+                               false, //ReadOnly 
+                               false); //Hidden
+
+
+$fileSize = new XMLElement('schema:', //xml prefix  
+                           'fileSize', //Element name
+                           'http://www.w3.org/2001/XMLSchema#string', //xml-attribute
+                           '', //HTML value
+                           '', //HTML title
+                           false, //HasMultiplicity
+                           false, //IsRequired
+                           'doubleColumn', //Element type
+                           false, //ReadOnly
+                           true); //Hidden
+
+
+$accessURL = new XMLElement('dcat:', //xml prefix 
+                            'accessURL', //Element name
+                            '', //xml-attribute
+                            '', //HTML value
+                            '', //HTML title
+                            true, //HasMultiplicity
+                            true, //IsRequired
+                            'singleColumn', //Element type
+                            false, //ReadOnly
+                            false); //Hidden
+
+
+$license = new XMLElement('cc:', //xml prefix
+                          'license', //Element name
+                          '', //xml-attribute
+                          '', //HTML value
+                          '', //HTML title
+                          true, //HasMultiplicity
+                          false, //IsRequired
+                          'singleColumn', //Element type
+                          false, //ReadOnly 
+                          false); //Hidden
+
+
+$format = new XMLElement('dct:', //xml prefix
+                         'format', //Element name
+                         getFormatTitle(), //xml-attribute 
+                         getFormatValue(), //HTML value
+                         getFormatDescriptions(), //HTML title
+                         false, //HasMultiplicity
+                         false, //IsRequired
+                         'singleDropdown', //Element type
+                         false, //ReadOnly 
+                         false); //Hidden
+
+
+$rights = new XMLElement('dct:', //xml prefix
+                         'rights', //Element name
+                         '', //xml-attribute
+                         '', //HTML value
+                         '', //HTML title
+                         false, //HasMultiplicity
+                         false, //IsRequired
+                         'singleColumn', //Element type
+                         false, //ReadOnly 
+                         false); //Hidden
+
+
+$businessArea = new XMLElement('dadk:', //xml prefix 
+                               'businessArea', //Element name 
+                               '', //xml-attribute
+                               '', //HTML value
+                               '', //HTML title
+                               false, //HasMultiplicity
+                               false, //IsRequired
+                               'singleColumn', //Element type
+                               false, //ReadOnly 
+                               false); //Hidden
+
+
+$businessAreaCode = new XMLElement('dadk:', //xml prefix 
+                                   'businessAreaCode', //Element name 
+                                   '', //xml-attribute
+                                   '', //HTML value
+                                   '', //HTML title
+                                   false, //HasMultiplicity
+                                   false, //IsRequired
+                                   'singleColumn', //Element type
+                                   false, //ReadOnly 
+                                   false); //Hidden
+
+
+$dctType = new XMLElement('dct:', //xml prefix 
+                          'type', //Element name
+                          'http://data.europa.eu/dr8/CoreDataModel', //xml-attribute
+                          '', //HTML value
+                          '', //HTML title
+                          false, //HasMultiplicity
+                          false, //IsRequired 
+                          'typeColumn', //Element type
+                          true, //ReadOnly
+                          false); //Hidden
+
+
+$rdfType = new XMLElement('rdf:', //xml prefix 
+                          'type', //Element name
+                          array('http://www.w3.org/ns/dcat#Dataset', 'http://www.w3.org/ns/dcat#Distribution'), //xml-attribute
+                          '', //HTML value
+                          '', //HTML title
+                          false, //HasMultiplicity
+                          false, //IsRequired 
+                          'typeColumn', //Element type
+                          true, //ReadOnly
+                          false)//Hidden
+;  
+                   
+function getChoices($doc){
     $result = [];
-    $tmp = [];
-    $val = '';
 
-    $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
+    $xml = new DOMDocument();
+    $xml->load($doc);
+    $xpath = new DOMXpath($xml);
+    $choices = $xpath->query('//rdf:Description[position() > 2]/@rdf:about'); //Find each 
 
-    $tmp = $xml->xpath('//@rdf:about');
-    $result = array_merge($result, $tmp);
+    foreach($choices as $choice){
 
-    $test = array('Model', 'ConceptModel', 'LogicalModel');
-
-    for ($i=0; $i < sizeof($result); $i++) { 
-        //echo var_dump(($result[$i]->about));
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="' . $result[$i]->about . '"]/skos:prefLabel[@xml:lang="da"]');
-        
-        $size = sizeof($tmp);
-
-        if($size == 1 && $tmp[0] == $choice){
-            $val = 'http://data.gov.dk/model/core/modeltype#' . $test[$i];
-        }
+        preg_match('/#(\S*)/', $choice->nodeValue, $matches, PREG_OFFSET_CAPTURE);
+        array_push($result, $matches[1][0]);
     }
-
-    return $val;
+    return $result;
 }
 
-//Defines an array which assoicates a valid choice in a dropdown menu with a corresponding value
-function getTypeValue(){
+//Gets the value of an xml-element. 
+//Takes two params;
+//$choice - an xml-element
+//$doc - the xml doc in which the element is present
+function getValue($doc, $path){
     $result = [];
 
-    $choices = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
+    $choices = getChoices($doc);
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = 'https://data.gov.dk/model/core/modeltype#' . $choices[$i];
+        $tmp = $path . $choices[$i];
         array_push($result, $tmp);    
     }
-
     return $result;
 }
 
-//Defines an array which associates a valid choice in a dropdown menu with a corresponding description
-function getTypeDescriptions(){
+function getDescription($doc, $path){
     $result = [];
-    $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
 
-    $attr = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
+    $xml = simplexml_load_file($doc);
 
-    for ($i=0; $i < sizeof($attr); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modeltype#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
-        $result = array_merge($result, $tmp);   
-    }
-
-    return $result;
-}
-
-//Defines an array which associates a valid choice in a dropdown menu with a corresponding title
-function getTypeTitle(){
-    $result = [];
-    $xml = simplexml_load_file('../../../../model/core/modeltype.rdf');
-
-    $choices = array('Model', 'ConceptModel', 'LogicalModel', 'CoreModel', 'Vocabulary', 'ApplicationModel', 'ApplicationProfile');
+    $choices = getChoices($doc);
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modeltype#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="' . $path . $choices[$i] . '"]/dct:description[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
     return $result;
 }
 
-function getRegimeValue(){
+function getTitle($doc, $path){
     $result = [];
 
-    $choices = array('FODS', 'Grunddata', 'International');
+    $xml = simplexml_load_file($doc);
+
+    $choices = getChoices($doc);
 
     for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = 'https://data.gov.dk/model/core/modellingregime#' . $choices[$i];
-        array_push($result, $tmp);    
-    }
-
-    return $result;
-}
-
-function getRegimeDescriptions(){
-    $result = [];
-    $xml = simplexml_load_file('../../../../model/core/modellingregime.rdf');
-
-    $attr = array('FODS', 'Grunddata', 'International');
-
-    for ($i=0; $i < sizeof($attr); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellingregime#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
+        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="' . $path . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
         $result = array_merge($result, $tmp);   
     }
 
-    return $result;
-}
-
-function getRegimeTitle(){
-    $result = [];
-    $xml = simplexml_load_file('../../../../model/core/modellingregime.rdf');
-
-    $choices = array('FODS', 'Grunddata', 'International');
-
-    for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellingregime#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
-        $result = array_merge($result, $tmp);   
-    }
-
-    return $result;
-}
-
-function getLevelValue(){
-    $result = [];
-
-    $choices = array('Dissemination', 'Reuse', 'Cohesion');
-
-    for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = 'https://data.gov.dk/model/core/modellinglevel#' . $choices[$i];
-        array_push($result, $tmp);    
-    }
-
-    return $result;
-}
-
-function getLevelDescriptions(){
-    $result = [];
-    $xml = simplexml_load_file('../../../../model/core/modellinglevel.rdf');
-
-    $attr = array('Dissemination', 'Reuse', 'Cohesion');
-
-    for ($i=0; $i < sizeof($attr); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellinglevel#' . $attr[$i] . '"]/dct:description[@xml:lang="da"]');
-        $result = array_merge($result, $tmp);   
-    }
-
-    return $result;
-}
-
-function getLevelTitle(){
-    $result = [];
-    $xml = simplexml_load_file('../../../../model/core/modellinglevel.rdf');
-
-    $choices = array('Dissemination', 'Reuse', 'Cohesion');
-
-    for ($i=0; $i < sizeof($choices); $i++) { 
-        $tmp = $xml->xpath('/rdf:RDF/rdf:Description[@rdf:about="https://data.gov.dk/model/core/modellinglevel#' . $choices[$i] . '"]/skos:prefLabel[@xml:lang="da"]');
-        $result = array_merge($result, $tmp);   
-    }
-
-    return $result;
+    return $result; 
 }
 
 function getThemeValue(){
