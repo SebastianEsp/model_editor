@@ -55,7 +55,7 @@
         }
     }
 
-    //Create a table and fill in the data form the model
+    //Create a table and fill in the data from the model
     echo '<table class="table table-bordered table-hover table-sm" id="modelTable">
             <thead class="thead-dark">
                 <th>Tag Name</th>

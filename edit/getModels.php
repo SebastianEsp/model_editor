@@ -12,9 +12,11 @@
     }
 
 
+    //Get all models within the modelkatalog document.
     function model(){
         $xml = simplexml_load_file("../../xml/modelkatalog.rdf.xml");
 
+        //Construct first part of the dropdown element
         $dropdown_1 =  '<div class="dropdown dropdown-scroll right-padding">
         <a class="btn btn-secondary dropdown-toggle inputField" href="#" name="" role="input" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick="bringToFront()">                
             Models
@@ -23,8 +25,8 @@
         <input type="text" placeholder="Search.." id="dropdown_search" onkeyup="dropdownSearch()">'; 
     
         $dropdown_2 = '';
-        $models = $xml->xpath('//dcat:distribution[@rdf:resource]/../dct:title[@xml:lang="da"]');
-        foreach($models as $model) {
+        $models = $xml->xpath('//dcat:distribution[@rdf:resource]/../dct:title[@xml:lang="da"]'); //Find the Danish title tag from all elements that have a disiribution. Only models have distributions, as such we do not get other elements from the document
+        foreach($models as $model) { //Add a new child element to the dropdown menu for each model found in the xpath expression
             $dropdown_2 = $dropdown_2 . '<a class="dropdown-item" title="" onclick="getModelFromTitle(\''.$model.'\');">'.$model.'</a>';
         }
     
@@ -36,8 +38,11 @@
         echo $dropdown_final;
     }
 
+    //Get all models within the modelkatalog document.
     function dist(){
         $xml = simplexml_load_file("../../xml/modelkatalog.rdf.xml");
+
+        //Construct first part of the dropdown element
         $dropdown_1 =  '<div class="dropdown dropdown-scroll right-padding">
         <a class="btn btn-secondary dropdown-toggle inputField" href="#" name="" role="input" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick="bringToFront()">                
             Distributions
@@ -46,8 +51,8 @@
         <input type="text" placeholder="Search.." id="dropdown_search" onkeyup="dropdownSearch()">'; 
     
         $dropdown_2 = '';
-        $distributions = $xml->xpath('//rdf:type[@rdf:resource="http://www.w3.org/ns/dcat#Distribution"]/../dct:title[@xml:lang="da"]');
-        foreach($distributions as $dist) {
+        $distributions = $xml->xpath('//rdf:type[@rdf:resource="http://www.w3.org/ns/dcat#Distribution"]/../dct:title[@xml:lang="da"]'); //Find the Danish title tag from all elements with the type disiribution.
+        foreach($distributions as $dist) { //Add a new child element to the dropdown menu for each model found in the xpath expression
             $dropdown_2 = $dropdown_2 . '<a class="dropdown-item" title="" onclick="getModelFromTitle(\''.$dist.'\');">'.$dist.'</a>';
         }
     

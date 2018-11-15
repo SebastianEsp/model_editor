@@ -176,7 +176,7 @@ function lostFocus(sender){
   var isFirefox = typeof InstallTrigger !== 'undefined';
   if(isFirefox){ //Firefox handles things differently which means the selected input must be focused before the new value is displayed.
                  //as such we focus the selectedInput field and then remove the focus again afterwards.
-                 //Be mindfull that the way to detect Firefox as the browser may change in the future as the browser is updated.
+                 //Be mindfull of the way to detect Firefox as the identifier may change in the future as the browser is updated.
     $(selectedInput).prop('disabled', false);
     selectedInput.attr('value', $(sender).val());
     sender.value = '';
